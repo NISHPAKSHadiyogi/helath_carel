@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "985937527249",
+    "project_id": "healthcare-eadb1",
+    "storage_bucket": "healthcare-eadb1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985937527249:android:9669e232c54e3dd27f20f0",
+        "android_client_info": {
+          "package_name": "com.tripleseven.helath_care"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "985937527249-b90r5b99o1h6ua62gqr3t4bav06lkn73.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tripleseven.helath_care",
+            "certificate_hash": "2a9c3b9a038147a4cdb8454decb23231caa53634"
+          }
+        },
+        {
+          "client_id": "985937527249-fvbhmskvnsovm8bbmm4f1hlh5bua8t5v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr-eVFnDwgx8pR9g30hiuHfSBwrgBtx_M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "985937527249-fvbhmskvnsovm8bbmm4f1hlh5bua8t5v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
