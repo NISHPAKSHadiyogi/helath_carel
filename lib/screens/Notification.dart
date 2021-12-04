@@ -11,6 +11,7 @@ import 'package:helath_care/Api/Models/notificationModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Home.dart';
+import 'bottomBar.dart';
 
 
 class Notificationscreen extends StatefulWidget {
@@ -23,8 +24,12 @@ class Notificationscreen extends StatefulWidget {
 class _NotificationscreenState extends State<Notificationscreen> {
   String limit = '10';
   String offset = '0';
+  String id="";
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
 
@@ -40,6 +45,7 @@ class _NotificationscreenState extends State<Notificationscreen> {
                 context,
                 MaterialPageRoute(builder: (context) => Homescreen()),
               );*/
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>bottomBar(bottom: 2, jobid: id)));
 
               },
               child: Icon(Icons.arrow_back_ios_rounded, color: Colors.white,),
@@ -49,143 +55,165 @@ class _NotificationscreenState extends State<Notificationscreen> {
 
 
         ),
-        body: SingleChildScrollView(
-            child: Container(
-              height: 650,
-              child: Column(
-                children: [
-                  Container(
-                    height: 650,
-                    child: Container(
-                        child: FutureBuilder<notificationModel>(
-                            future: Notification(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<notificationModel> snapshot) {
-                              if (snapshot.hasData) {
-                                print("objectPrint" +
-                                    snapshot.data!.data
-                                        .toString());
-                                return
-                                  Expanded(
-                                    child: ListView.builder(
-                                      itemCount: snapshot
-                                          .data!.data.length,
-                                      itemBuilder: (context, index) {
-                                        return Card(
-                                          elevation: 8.0,
-                                          margin: EdgeInsets.all(8.0),
-                                          child: Column(
+        body: RefreshIndicator(
+          onRefresh: refresh,
+          child: Container(
+            padding: EdgeInsets.only(top: 20),
+            child: SingleChildScrollView(
+                child: Container(
 
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Container(
-                                                    margin: EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: height*0.80,
+                        child: Container(
+                            child: FutureBuilder<notificationModel>(
+                                future: Notification(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<notificationModel> snapshot) {
+                                  if (snapshot.hasData) {
+                                    print("objectPrint" +
+                                        snapshot.data!.data
+                                            .toString());
+                                    return
+                                      Expanded(
+                                        child: RefreshIndicator(
+                                          onRefresh: refresh,
+                                          child: ListView.builder(
+                                            itemCount: snapshot
+                                                .data!.data.length,
+                                            itemBuilder: (context, index) {
+                                              return Card(
+                                                elevation: 8.0,
+                                                margin: EdgeInsets.all(8.0),
+                                                child: Column(
 
-                                                    width: 100,
-                                                    height: 100,
-                                                    decoration: BoxDecoration(
-                                                      color: const Color(
-                                                          0xfffcf6e0),
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Container(
+                                                          margin: EdgeInsets.all(8.0),
 
-                                                      borderRadius: BorderRadius
-                                                          .all(
-                                                          Radius.circular(
-                                                              100.0)),
-                                                      border: Border.all(
-                                                        color: Colors.amber,
-                                                        width: 2.0,
-                                                      ),
+                                                          width: 100,
+                                                          height: 100,
+                                                          decoration: BoxDecoration(
+                                                            color: const Color(
+                                                                0xfffcf6e0),
 
-                                                    ),
-                                                    child: CircleAvatar(
-                                                        backgroundColor: Color(
-                                                            0xfffcf6e0),
+                                                            borderRadius: BorderRadius
+                                                                .all(
+                                                                Radius.circular(
+                                                                    100.0)),
+                                                            border: Border.all(
+                                                              color: Colors.amber,
+                                                              width: 2.0,
+                                                            ),
 
-                                                        child: Image.asset(
-                                                          "assets/images/notification_yellow.png",
-                                                          height: 50,)),
-
-                                                  ),
-                                                  Container(
-
-                                                    child: Expanded(
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment
-                                                            .start,
-                                                        children: [
-
-                                                          Text(
-                                                            '${snapshot.data!
-                                                                .data[index].title}',
-                                                            style: TextStyle(
-                                                                fontSize: 13,
-                                                                fontWeight: FontWeight
-                                                                    .w900),),
-                                                          SizedBox(height: 8,),
-                                                          Row(
-                                                            children: [
-                                                              Image.asset(
-                                                                'assets/images/shift_time.png',
-                                                                height: 18,
-                                                                width: 20,),
-                                                              Text(
-                                                               ' ${snapshot.data!
-                                                                  .data[index].created_at}',
-                                                                style: TextStyle(
-                                                                    fontSize: 12,
-                                                                    color: kPrimaryColor,
-                                                                    fontWeight: FontWeight
-                                                                        .w600),),
-                                                            ],
                                                           ),
-                                                          Text(
-                                                            ' ${snapshot.data!
-                                                                .data[index].description}',
-                                                            style: TextStyle(
-                                                              fontSize: 12,),),
-                                                          SizedBox(height: 8,),
+                                                          child: CircleAvatar(
+                                                              backgroundColor: Color(
+                                                                  0xfffcf6e0),
+
+                                                              child: Image.asset(
+                                                                "assets/images/notification_yellow.png",
+                                                                height: 50,)),
+
+                                                        ),
+                                                        Container(
+
+                                                          child: Expanded(
+                                                            child: Column(
+                                                              crossAxisAlignment: CrossAxisAlignment
+                                                                  .start,
+                                                              children: [
+
+                                                                Text(
+                                                                  '${snapshot.data!
+                                                                      .data[index].title}',
+                                                                  style: TextStyle(
+                                                                      fontSize: 13,
+                                                                      fontWeight: FontWeight
+                                                                          .w900),),
+                                                                SizedBox(height: 8,),
+                                                                Row(
+                                                                  children: [
+                                                                    Image.asset(
+                                                                      'assets/images/shift_time.png',
+                                                                      height: 18,
+                                                                      width: 20,),
+                                                                    Text(
+                                                                     ' ${snapshot.data!
+                                                                        .data[index].created_at}',
+                                                                      style: TextStyle(
+                                                                          fontSize: 12,
+                                                                          color: kPrimaryColor,
+                                                                          fontWeight: FontWeight
+                                                                              .w600),),
+                                                                  ],
+                                                                ),
+                                                                Text(
+                                                                  ' ${snapshot.data!
+                                                                      .data[index].description}',
+                                                                  style: TextStyle(
+                                                                    fontSize: 12,),),
+                                                                SizedBox(height: 8,),
 
 
-                                                        ],
-                                                      ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+
+
+                                                      ],
                                                     ),
-                                                  ),
 
 
-                                                ],
-                                              ),
-
-
-                                            ],
+                                                  ],
+                                                ),
+                                              );
+                                            },
                                           ),
-                                        );
-                                      },
-                                    ),
-                                  );
-                              }
-                              else {
-                                return SizedBox();
-                              }
-                            }
-                            )
-                    ),
-                  )
+                                        ),
+                                      );
+                                  }
+                                  else{
+                                    if(snapshot.hasError)
+                                    {
+                                      return Center(child: SizedBox(
+                                        child: Text("NO Data Found" ,style: TextStyle(color: Colors.red),),),) ;}
+                                    else{
+
+                                      return Center (child:SizedBox( child: Text("loading"),));
+                                    }
+                                  }
+                                }
+                                )
+                        ),
+                      )
 
 
-                ],
-              ),
+                    ],
+                  ),
 
-            )
+                )
+            ),
+          ),
         )
     );
+  }
+  Future <void> refresh()
+  async {
+    setState(() {
+
+    });
   }
   Future <notificationModel> Notification() async {
     String username = 'adiyogi';
     String password = 'adi12345';
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? userid = preferences.getString("userid");
-    String id= userid.toString();
+     id= userid.toString();
    // String id= "23";
 
 

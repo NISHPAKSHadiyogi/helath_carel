@@ -49,6 +49,9 @@ class Datum {
     required this.shift_start_time,
     required this.address,
     required this.total_work_time,
+    required this.job_price,
+    required this.check_in,
+    required this.check_out,
 
 
 
@@ -61,8 +64,10 @@ class Datum {
   String shift_end_time;
   String address;
   String id;
-  String total_work_time;
-
+  int total_work_time;
+String job_price;
+  String check_in;
+  String check_out;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
@@ -73,6 +78,9 @@ class Datum {
     shift_end_time: json["shift_end_time"],
     address: json["address"],
     total_work_time: json["total_work_time"],
+      job_price:json["job_price"],
+    check_in: json["check_in"],
+    check_out:json["check_out"],
 
 
   );
@@ -85,10 +93,11 @@ class Datum {
     "shift_date":shift_date,
     "shift_start_time":shift_start_time,
     "shift_end_time":shift_end_time,
-
+    "job_price":job_price,
     "address": address,
     "total_work_time": total_work_time,
-
+    "check_in":check_in,
+    "check_out":check_out,
 
 
 

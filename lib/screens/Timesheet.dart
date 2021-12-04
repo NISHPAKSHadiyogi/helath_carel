@@ -46,6 +46,7 @@ class _timesheetScreenState extends State<timesheetScreen> {
   String end="";
   String check_in="";
   String check_out="";
+  Color completecolor= Colors.red;
   @override
   void initState() {
     // TODO: implement initState
@@ -62,433 +63,466 @@ class _timesheetScreenState extends State<timesheetScreen> {
 
 
   }
+  Future<bool> onWillPop() async {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>bottomBar(bottom: 0, jobid: jobid1)));
+    return true;
+  }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: kPrimaryColor,
+    return WillPopScope(
+      onWillPop:onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: kPrimaryColor,
 
-        title: Text('Timesheet',style: TextStyle(color: Colors.white),),
-        centerTitle: true,
-        automaticallyImplyLeading: true,
-          leading: Container(
+          title: Text('Timesheet',style: TextStyle(color: Colors.white),),
+          centerTitle: true,
+          automaticallyImplyLeading: true,
+            leading: Container(
 
-            child: GestureDetector(
-              onTap: (){
-                Navigator.of(context).pop();
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>bottomBar(bottom: 0, jobid: jobid1)));
+                 // Navigator.of(context).pop();
 
-              },
-              child: Icon(Icons.arrow_back_ios_rounded,color: Colors.white,),
+                },
+                child: Icon(Icons.arrow_back_ios_rounded,color: Colors.white,),
 
+              ),
             ),
-          ),
+
+        ),
+        body:SingleChildScrollView (
+
+            child: FutureBuilder<String>(
+      future: jobDetail(),
+      builder: (BuildContext context,
+      AsyncSnapshot<String> snapshot) {
+      print("objectPrint" +
+      snapshot.error
+          .toString());
+      if (snapshot.data=="success") {
+      print("objectPrint" +
+      snapshot.data!
+          .toString());
+
+      return
+
+
+      Column(
+      children: [
+      Card(
+      elevation: 5,
+      margin: EdgeInsets.all(10),
+      child:
+      Container(
+      padding: EdgeInsets.all(5),
+
+      child:
+      Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+      Container(
+
+      child: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+
+      children: [
+      Wrap(
+      // spacing: 0.5,
+
+      children: [
+
+      Container(
+      width: size.width*0.69,
+      padding:EdgeInsets.all(5.5),
+      child: Text(job_name,
+
+      style: TextStyle(color: kPrimaryColor, fontSize: 16,fontWeight: FontWeight.bold,),),
+      ),
+      Container(
+      width:75,
+      padding:
+      EdgeInsets.symmetric(horizontal: 2, vertical: 5),
+      margin:
+      EdgeInsets.only(left: 0,bottom: 5,top: 5),
+      height: 30,
+      decoration: ShapeDecoration(
+      color: ksecondaryColor,
+      shape: RoundedRectangleBorder(
+      side: BorderSide(
+      width: 1.0,
+      style: BorderStyle.solid,
+      color: kPrimaryColor),
+      borderRadius: BorderRadius.all(Radius.circular(1)),
+      ),
+      ),
+      child: Text("\$${job_price}", style: TextStyle( color: kPrimaryColor),),
+      ),
+
+      ])
+      ],
+      ),
 
       ),
-      body:SingleChildScrollView (
-
-          child: FutureBuilder<String>(
-    future: jobDetail(),
-    builder: (BuildContext context,
-    AsyncSnapshot<String> snapshot) {
-    print("objectPrint" +
-    snapshot.error
-        .toString());
-    if (snapshot.data=="success") {
-    print("objectPrint" +
-    snapshot.data!
-        .toString());
-
-    return
 
 
-    Column(
-    children: [
-    Card(
-    elevation: 5,
-    margin: EdgeInsets.all(10),
-    child:
-    Container(
-    padding: EdgeInsets.all(5),
-
-    child:
-    Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    Container(
-
-    child: Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-
-    children: [
-    Wrap(
-    // spacing: 0.5,
-
-    children: [
-
-    Container(
-    width: size.width*0.7,
-    padding:EdgeInsets.all(5.8),
-    child: Text(job_name,
-    style: TextStyle(color: kPrimaryColor, fontSize: 14,fontWeight: FontWeight.bold),),
-    ),
-    Container(
-    width:75,
-    padding:
-    EdgeInsets.symmetric(horizontal: 2, vertical: 5),
-    margin:
-    EdgeInsets.only(left: 3,bottom: 5,top: 5),
-    height: 30,
-    decoration: ShapeDecoration(
-    color: ksecondaryColor,
-    shape: RoundedRectangleBorder(
-    side: BorderSide(
-    width: 1.0,
-    style: BorderStyle.solid,
-    color: kPrimaryColor),
-    borderRadius: BorderRadius.all(Radius.circular(1)),
-    ),
-    ),
-    child: Text("\$${job_price}/H", style: TextStyle( color: kPrimaryColor),),
-    ),
-
-    ])
-    ],
-    ),
-
-    ),
+      Container(
+      width: width,
 
 
-    Container(
-    width: width,
+      child: Wrap(
+      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //  mainAxisSize: MainAxisSize.max,
+      children: [
+
+      Container(
+
+      child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        Row(
+          //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+            children:[
+              Container(
+                //padding: EdgeInsets.all(2.8),
+                child: Image.asset('assets/images/location.png',
+                  height: 20,
+                  width: 20,),
+              ),
+
+              SizedBox(width: 8,),
+              Container(
+                // margin: EdgeInsets.only(top: size.height*0.02),
+                width: width*0.7,
+                child:
+                Text(
+                  address,
+                  style: TextStyle(fontSize: 11),),
+              ),
+            ]
+        ),
+      SizedBox(height: 5,),
+      Container(
+      padding: EdgeInsets.all(2.8),
+      child: Wrap(
+
+      children: [
+      Image.asset('assets/images/shift_date.png',
+      height: 18,
+      width: 20,),
+      SizedBox(width: 5,),
+      Text('Shift Date :', style: TextStyle(fontSize: 11),),
+      Text(shift_date, style: TextStyle(fontSize: 11),),
+      ],
+      ),
+      ),
+        SizedBox(height: 5,),
+      Container(
+      padding: EdgeInsets.all(2.8),
+      child: Wrap(
+      children: [
+      Image.asset('assets/images/shift_time.png',
+      height: 18,
+      width: 20,),
+      SizedBox(width: 5,),
+      Text('Shift Time :', style: TextStyle(fontSize: 11),),
+      Text('${shift_start_time} To ${shift_end_time}', style: TextStyle(fontSize: 11),),
+      ],
+      ),
+      ),
+        SizedBox(height: 5,),
+      Container(
+      padding:EdgeInsets.all(2.8),
+      child: Text(job_description,
+      style: TextStyle( fontSize: 10),),
+      ),
+      ],
+      ),
+      ),
 
 
-    child: Wrap(
-    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //  mainAxisSize: MainAxisSize.max,
-    children: [
+      ],
+      ),
 
-    Container(
+      ),
+      Container(
+      width: width,
+      padding: EdgeInsets.all(5),
+      child:
+      Wrap(
+      spacing: 0,
+      children: [
 
-    child: Column(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
+      Container(
 
-    Container(
-    padding: EdgeInsets.all(2.8),
-    child: Wrap(
-    children: [
-    Image.asset('assets/images/location.png',
-    height: 20,
-    width: 20,),
-    SizedBox(width: 5,),
-    Text(address,
-    style: TextStyle(fontSize: 11),),
-    ],
-    ),
-    ),
-    Container(
-    padding: EdgeInsets.all(2.8),
-    child: Wrap(
+      padding:
+      EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+      margin:
+      EdgeInsets.only(left: 0,bottom: 5,right: 5),
+      height: 35,
+      width: width/2.3,
+      decoration: ShapeDecoration(
+      color: Colors.grey,
+      shape: RoundedRectangleBorder(
+      side: BorderSide(
+      width: 1.0,
+      style: BorderStyle.solid,
+      color: Colors.grey,),
+      borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
+      ),
+     child:Center(child:  Text("Start Shift", style: TextStyle( color: Colors.white,fontSize: 14,),))
 
-    children: [
-    Image.asset('assets/images/shift_date.png',
-    height: 18,
-    width: 20,),
-    SizedBox(width: 5,),
-    Text('Shift Date :', style: TextStyle(fontSize: 11),),
-    Text(shift_date, style: TextStyle(fontSize: 11),),
-    ],
-    ),
-    ),
-    Container(
-    padding: EdgeInsets.all(2.8),
-    child: Wrap(
-    children: [
-    Image.asset('assets/images/shift_time.png',
-    height: 18,
-    width: 20,),
-    SizedBox(width: 5,),
-    Text('Shift Time :', style: TextStyle(fontSize: 11),),
-    Text('${shift_start_time}AM To ${shift_end_time}PM', style: TextStyle(fontSize: 11),),
-    ],
-    ),
-    ),
-    Container(
-    padding:EdgeInsets.all(2.8),
-    child: Text(job_description,
-    style: TextStyle( fontSize: 10),),
-    ),
-    ],
-    ),
-    ),
+      ),
+      Container(
+      padding:
+      EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+      margin:
+      EdgeInsets.only(left: 0,bottom: 5),
+      height: 35,
+      width: width/2.3,
+      decoration: ShapeDecoration(
+      color: Colors.grey,
+      shape: RoundedRectangleBorder(
+      side: BorderSide(
+      width: 1.0,
+      style: BorderStyle.solid,
+      color: Color(0xffc4c4c4),),
+      borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
+      ),
+          child:Center(child:  Text("End Shift", style: TextStyle( color: Colors.white,fontSize: 14,),))
+      ),
+      ])
+      ),
+      Divider(
+      height: 5,
+      thickness: 1,
+      color: Colors.grey,
+      ),
 
+      FittedBox(
+      child:
+      Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-    ],
-    ),
+      children: [
+      Row(
+      children: [
+      Container(
+      padding:EdgeInsets.all(8),
+      child: Text('Client Name :',
+      style: TextStyle(color: Colors.black,
+      fontSize: 11,fontWeight: FontWeight.w600),),
+      ),
 
-    ),
-    Container(
-    width: width,
-    padding: EdgeInsets.all(5),
-    child:
-    Wrap(
-    spacing: 2,
-    children: [
+      Container(
+        width: width/2.2,
+      padding:EdgeInsets.all(0),
+      child: Text(client_name,
+      style: TextStyle(color: Colors.black, fontSize: 11),),
+      ),
+      ],
+      ),
 
-    Container(
+      Container(
+      padding:EdgeInsets.only(right: 0,left: 0),
+      child: Text(job_status,
+      style: TextStyle(color: completecolor, fontSize: 11,fontWeight: FontWeight.w600),),
+      ),
+      ],
+      ),
+      ),
+      ],
+      ),
+      ),
+      ),
 
-    padding:
-    EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-    margin:
-    EdgeInsets.only(left: 0,bottom: 5,right: 5),
-    height: 30,
-    decoration: ShapeDecoration(
-    color: Colors.grey,
-    shape: RoundedRectangleBorder(
-    side: BorderSide(
-    width: 1.0,
-    style: BorderStyle.solid,
-    color: Colors.grey,),
-    borderRadius: BorderRadius.all(Radius.circular(5)),
-    ),
-    ),
-    child: Text("Start Shift",
-    style: TextStyle( color: Colors.white),),
-    ),
-    Container(
-    padding:
-    EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-    margin:
-    EdgeInsets.only(left: 0,bottom: 5),
-    height: 30,
-    decoration: ShapeDecoration(
-    color: Colors.grey,
-    shape: RoundedRectangleBorder(
-    side: BorderSide(
-    width: 1.0,
-    style: BorderStyle.solid,
-    color: Color(0xffc4c4c4),),
-    borderRadius: BorderRadius.all(Radius.circular(5)),
-    ),
-    ),
-    child: Text("End  Shift", style: TextStyle( color: Colors.white),),
-    ),
-    ])
-    ),
-    Divider(
-    height: 5,
-    thickness: 1,
-    color: Colors.grey,
-    ),
+      Card(
+      elevation: 5,
+      margin: EdgeInsets.all(10),
 
-    FittedBox(
-    child:
-    Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+      children: [
+      Row(
+      children: [
+      Container(
+      margin: EdgeInsets.fromLTRB(5, 18, 5, 10),
 
-    children: [
-    Row(
-    children: [
-    Container(
-    padding:EdgeInsets.all(8.8),
-    child: Text('Client Name :',
-    style: TextStyle(color: Colors.black,
-    fontSize: 16,fontWeight: FontWeight.w600),),
-    ),
+      child: Image.asset('assets/images/checkin.png',
+      width: width/8,
+      height: width/10,
+      ),
+      ),
+      Container(
+      margin: EdgeInsets.all(5),
+      child: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+      Text('Check In Time',
+      style: TextStyle(color: kPrimaryColor, fontSize: 12,fontWeight: FontWeight.w600),),
+      SizedBox(height: 3,),
+      Text('${check_in}',
+      style: TextStyle(color: Colors.black, fontSize: 12,fontWeight: FontWeight.w400),),
+      ],
+      ),
+      ),
+      ],
+      ),
 
-    Container(
-    padding:EdgeInsets.all(8.8),
-    child: Text(client_name,
-    style: TextStyle(color: Colors.black, fontSize: 16),),
-    ),
-    ],
-    ),
+      Row(
+      children: [
+      Container(
+      margin: EdgeInsets.all(5),
+      child: Image.asset('assets/images/check_out.png',
+      width: width/8,
+      height: width/10,
+      ),
+      ),
+      Container(
+      margin: EdgeInsets.all(5),
+      child: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+      Text('Check Out Time',
+      style: TextStyle(color: kPrimaryColor, fontSize: 12,fontWeight: FontWeight.w600),),
+      SizedBox(height: 3,),
+      Text('${check_out} ',
+      style: TextStyle(color: Colors.black, fontSize: 12,fontWeight: FontWeight.w400,),),
+      ],
+      ),
+      ),
+      ],
+      ),
+      Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+      Row(
+      children: [
+      Container(
+        margin: EdgeInsets.fromLTRB(16, 10, 5, 10),
+      child: Image.asset('assets/images/break_hr.png',
+      width: width/11,
+      height: width/9,
+      ),
+      ),
+      Container(
+        margin: EdgeInsets.fromLTRB(5, 10, 5, 10),
+      child: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+      Text('Break Hr',
+      style: TextStyle(color: kPrimaryColor, fontSize: 12,fontWeight: FontWeight.w600),),
+      SizedBox(height: 3,),
+      ValueListenableBuilder(
+      builder: (ctx, value, child) {
+      return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+      Text(
+      '$value min',
+      style: TextStyle(color: Colors.black, fontSize: 12,fontWeight: FontWeight.w400),
+      ),
 
-    Container(
-    padding:EdgeInsets.all(8.8),
-    child: Text(job_status,
-    style: TextStyle(color: Colors.red, fontSize: 16,fontWeight: FontWeight.w600),),
-    ),
-    ],
-    ),
-    ),
-    ],
-    ),
-    ),
-    ),
+      ],
+      );
+      },
+      valueListenable: Breakhr,
+      child: Text('${time1} min',
+      style: TextStyle(color: Colors.black, fontSize: 15,fontWeight: FontWeight.w400),),
 
-    Card(
-    elevation: 5,
-    margin: EdgeInsets.all(5),
-    child: Column(
-    children: [
-    Row(
-    children: [
-    Container(
-    margin: EdgeInsets.all(5),
-    child: Image.asset('assets/images/checkin.png',
-    width: width/8,
-    height: width/10,
-    ),
-    ),
-    Container(
-    margin: EdgeInsets.all(5),
-    child: Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    Text('Check In Time',
-    style: TextStyle(color: kPrimaryColor, fontSize: 16,fontWeight: FontWeight.w600),),
-    SizedBox(width: 15,),
-    Text('${check_in}AM',
-    style: TextStyle(color: Colors.black, fontSize: 15,fontWeight: FontWeight.w400),),
-    ],
-    ),
-    ),
-    ],
-    ),
+      ),
+      ],
+      ),
+      ),
+      ],
+      ),
 
-    Row(
-    children: [
-    Container(
-    margin: EdgeInsets.all(5),
-    child: Image.asset('assets/images/check_out.png',
-    width: width/8,
-    height: width/10,
-    ),
-    ),
-    Container(
-    margin: EdgeInsets.all(5),
-    child: Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    Text('Check Out Time',
-    style: TextStyle(color: kPrimaryColor, fontSize: 16,fontWeight: FontWeight.w600),),
-    SizedBox(width: 15,),
-    Text('${check_out} AM',
-    style: TextStyle(color: Colors.black, fontSize: 15,fontWeight: FontWeight.w400),),
-    ],
-    ),
-    ),
-    ],
-    ),
-    Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-    Row(
-    children: [
-    Container(
-    margin: EdgeInsets.all(5),
-    child: Image.asset('assets/images/break_hr.png',
-    width: width/8,
-    height: width/10,
-    ),
-    ),
-    Container(
-    margin: EdgeInsets.all(5),
-    child: Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    Text('Break Hr',
-    style: TextStyle(color: kPrimaryColor, fontSize: 16,fontWeight: FontWeight.w600),),
-    SizedBox(width: 15,),
-    ValueListenableBuilder(
-    builder: (ctx, value, child) {
-    return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: <Widget>[
-    Text(
-    '$value min',
-    style: TextStyle(color: Colors.black, fontSize: 15,fontWeight: FontWeight.w400),
-    ),
-
-    ],
-    );
-    },
-    valueListenable: Breakhr,
-    child: Text('${time1} min',
-    style: TextStyle(color: Colors.black, fontSize: 15,fontWeight: FontWeight.w400),),
-
-    ),
-    ],
-    ),
-    ),
-    ],
-    ),
-
-    GestureDetector(
-    onTap: (){
-    showDialog(
-    context: context,
-    builder: (_) =>
-    CustomEventDialog(title: "titls", content: "content"));
-    },
-    child: Container(
-    padding:
-    EdgeInsets.symmetric(horizontal: 7, vertical: 12),
-    margin:
-    EdgeInsets.all(5),
-    height: 50,
-    decoration: ShapeDecoration(
-    color: Colors.white,
-    shape: RoundedRectangleBorder(
-    side: BorderSide(
-    width: 1.0,
-    style: BorderStyle.solid,
-    color: Colors.grey),
-    borderRadius: BorderRadius.all(Radius.circular(1)),
-    ),
-    ),
-    child: Text("Select Time", style: TextStyle( color: Colors.grey, fontWeight: FontWeight.w600),),
-    ),
-    ),
+      GestureDetector(
+      onTap: (){
+      showDialog(
+      context: context,
+      builder: (_) =>
+      CustomEventDialog(title: "titls", content: "content"));
+      },
+      child: Container(
+      padding:
+    EdgeInsets.all(7),
+        //  EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      margin:
+      EdgeInsets.all(20),
+      height: 30,
+      decoration: ShapeDecoration(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+      side: BorderSide(
+      width: 1.0,
+      style: BorderStyle.solid,
+      color: Colors.grey),
+      borderRadius: BorderRadius.all(Radius.circular(1)),
+      ),
+      ),
+      child: Text("Select Time", style: TextStyle( color: Colors.grey, fontWeight: FontWeight.w600,fontSize: 10),),
+      ),
+      ),
 
 
-    ],
-    ),
-    SizedBox(height: 5,),
-    Container(
-    margin: EdgeInsets.symmetric(vertical: 20),
-    width: size.width * 0.89,
-    child: ClipRRect(
-    borderRadius: BorderRadius.circular(5),
-    // ignore: deprecated_member_use
-    child: FlatButton(
-    padding: EdgeInsets.symmetric(
-    vertical: 20, horizontal: 20),
-    color: kPrimaryColor,
-    onPressed: () {
+      ],
+      ),
+      SizedBox(height: 5,),
+      Container(
+      margin: EdgeInsets.symmetric(vertical: 15),
+      width: size.width * 0.89,
+      child: ClipRRect(
+      borderRadius: BorderRadius.circular(5),
+      // ignore: deprecated_member_use
+      child: FlatButton(
+      padding: EdgeInsets.symmetric(
+      vertical: 10, horizontal: 20),
+      color: kPrimaryColor,
+      onPressed: () {
 
 
-    Breakhrset();
+      Breakhrset();
 
 
-    },
-    child: Text(
-    "Save",
-    style:
-    TextStyle(color: Colors.white, fontSize: 15),
-    ),
-    ),
-    ),
-    ),
+      },
+      child: Text(
+      "Save",
+      style:
+      TextStyle(color: Colors.white, fontSize: 15),
+      ),
+      ),
+      ),
+      ),
 
 
-    ],
+      ],
 
-    ),
-    )
-    ],
-    );
-    }
-    else{return SizedBox();}
-    })
+      ),
+      )
+      ],
+      );
+      }
+      else{return SizedBox(child:Text("loading...."));}
+      })
+        ),
       ),
     );
   }
@@ -555,12 +589,32 @@ class _timesheetScreenState extends State<timesheetScreen> {
         if(job_status=="0")
         {
           job_status="pending";
+          completecolor=Colors.red;
         }
         if(job_status == "1")
         {
           job_status="process";
+          completecolor=Colors.red;
         }
-        if(job_status == "2"){ job_status="complete";}
+        if(job_status == "3")
+        {
+          job_status="Review Updated";
+          completecolor=Colors.green;
+
+        }
+        if(job_status == "4")
+
+        {
+          completecolor=Colors.red;
+          job_status="Closed";
+
+        }
+        if(job_status == "2")
+        {
+          job_status="complete";
+          completecolor=Colors.green;
+
+        }
         if(check_in=="0")
         {
           start="0";
@@ -613,7 +667,11 @@ class _timesheetScreenState extends State<timesheetScreen> {
   void Breakhrset() async {
     String username = 'adiyogi';
     String password = 'adi12345';
-    String valuebr1=valuebr+":00";
+    String valuebr1=valuebr;
+    List<String> a=valuebr1.split(":");
+      var min =int.parse(a[0])*60;
+      min=min+int.parse(a[1]);
+
     var respone;
     var res;
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -624,7 +682,7 @@ class _timesheetScreenState extends State<timesheetScreen> {
     print(basicAuth);
 
     String url = 'https://technolite.in/staging/777healthcare/api/job_break_time';
-    print('${url}------ ${jobid1}---${id}--${valuebr}');
+    print('${url}------ ${jobid1}---${id}--${min}');
     //Map<String, String> queryParameter = {
     //   routeKey: routeGetCount,
     //  };
@@ -641,13 +699,13 @@ class _timesheetScreenState extends State<timesheetScreen> {
 
           'employee_id':id,
 
-          'break_time':valuebr1
+          'break_time':min.toString()
 
 
         }),);
 
       print('Response status3a11:${requestUrl}');
-      var res = jsonDecode(respone.body);
+      //var res = jsonDecode(respone.body);
       if(respone.statusCode == 200){
         //  print('Response status3: ${jasonDataOffer["data"]["job_name"]}');
         print('Response status3a:${requestUrl}');
@@ -660,6 +718,8 @@ class _timesheetScreenState extends State<timesheetScreen> {
         address=jasonDataOffer["data"]["address"];
 
         */
+        var res = jsonDecode(respone.body);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${res["message"]}')));
 
         Navigator.push(
           context,
@@ -677,7 +737,6 @@ class _timesheetScreenState extends State<timesheetScreen> {
 
         //  print('Response status: ${userid} ${oldpassController.text}  ${newpassController.text}  ${cnfpassController.text}');
         // Navigator.push(context, MaterialPageRoute(builder: (context) => Homescreen()));
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${res["message"]}')));
 
       }else{
         print('Response statusp: ${respone.statusCode}');
@@ -686,8 +745,8 @@ class _timesheetScreenState extends State<timesheetScreen> {
         // res= jsonDecode(respone.body);
         var jasonDataOffer = jsonDecode(respone.body);
        // return jasonDataOffer;
-        print('Response status: ${res["message"]}');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${res["message"]}')));
+       // print('Response status: ${res["message"]}');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${jasonDataOffer["message"]}')));
       }
 
     }
@@ -697,7 +756,7 @@ class _timesheetScreenState extends State<timesheetScreen> {
       // res= jsonDecode(respone.body);
       var jasonDataOffer = jsonDecode(respone.body);
     //  return jasonDataOffer;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${res["message"]}')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${jasonDataOffer["message"]}')));
     }
 
 
@@ -743,6 +802,71 @@ class CustomEventDialogState extends State<CustomEventDialog> {
 
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              //Navigator.of(context).pop();
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(top: 5),
+
+                              height: 40,
+                              width: size.width*.25,
+                              //alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(5)
+                                ),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text("Hours",
+                                  style: TextStyle(color:kPrimaryColor,fontSize: 15),),
+                              ),
+
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          GestureDetector(
+                            onTap: (){
+                              //_incrementCounter();
+
+                             // Navigator.of(context).pop();
+                            },
+                            child:
+                            Container(
+                              margin: EdgeInsets.only(top: 5),
+
+                              height: 40,
+                              width: size.width*.25,
+                              //alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: kPrimaryColor,
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(5)
+                                ),
+                                border: Border.all(
+                                  color: kPrimaryColor,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text("Mins",
+                                  style: TextStyle(color:kPrimaryColor,fontSize: 15),),
+                              ),
+
+                            ),
+                          )
+                        ],
+                      ),
+
+
                       TimePickerSpinner(
                         is24HourMode: true,
                         normalTextStyle: TextStyle(
@@ -848,7 +972,25 @@ class CustomEventDialogState extends State<CustomEventDialog> {
 
   Future<void> _incrementCounter() async {
     setState(() {
-      Breakhr.value=_dateTime.hour.toString()+":"+_dateTime.minute.toString();
+      String dateh="";
+      String datemin="";
+      // _incrementCounter();
+      dateh=_dateTime.hour.toString();
+      datemin=_dateTime.minute.toString();
+      if(_dateTime.hour<10){
+
+        dateh  = "0"+_dateTime.hour.toString();
+
+      }
+      if(_dateTime.minute<10){
+        datemin="0"+_dateTime.minute.toString();
+      }
+
+
+      Breakhr.value = dateh + ":" + datemin;
+
+
+     // Breakhr.value=_dateTime.hour.toString()+":"+_dateTime.minute.toString();
        valuebr=Breakhr.value;
       textController=TextEditingController(text: time1.toString());
       print('${_dateTime} hi............................................');

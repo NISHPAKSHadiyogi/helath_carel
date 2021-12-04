@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:helath_care/Constant/Colors.dart';
+import 'package:helath_care/Constant/Colors.dart';
 import 'package:helath_care/screens/bottomBar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -37,7 +38,7 @@ class _WorksheetScreenState extends State<WorksheetScreen> {
 
   static TextEditingController reviewController = TextEditingController();
   static TextEditingController passController = TextEditingController();
-  String rate="";
+  String rate="1";
   String jobid1="";
   String job_name="";
   String address="";
@@ -57,6 +58,7 @@ class _WorksheetScreenState extends State<WorksheetScreen> {
   String end="";
   String check_in="";
   String check_out="";
+  Color completecolor= Colors.red;
   var  file1;
   late File f1;
   File? fds=File("");
@@ -81,698 +83,913 @@ class _WorksheetScreenState extends State<WorksheetScreen> {
 
   var  bytes;
   var filePath;
+  Future<bool> onWillPop() async {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>bottomBar(bottom: 0, jobid: jobid1)));
+    return true;
+  }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: kPrimaryColor,
+    return WillPopScope(
+      onWillPop: onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: kPrimaryColor,
 
-        title: Text('Worksheet',style: TextStyle(color: Colors.white),),
-        centerTitle: true,
-        automaticallyImplyLeading: true,
-        leading: Container(
+          title: Text('Worksheet',style: TextStyle(color: Colors.white),),
+          centerTitle: true,
+          automaticallyImplyLeading: true,
+          leading: Container(
 
-          child: GestureDetector(
-            onTap: (){
-              Navigator.of(context).pop();
+            child: GestureDetector(
+              onTap: (){
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>bottomBar(bottom: 0, jobid: jobid1)));
+               // Navigator.of(context).pop();
 
-            },
-            child: Icon(Icons.arrow_back_ios_rounded,color: Colors.white,),
+              },
+              child: Icon(Icons.arrow_back_ios_rounded,color: Colors.white,),
 
+            ),
           ),
         ),
-      ),
-        body: SingleChildScrollView(
-        child: FutureBuilder<String>(
-        future: jobDetail(),
-    builder: (BuildContext context,
-    AsyncSnapshot<String> snapshot) {
-    print("objectPrint" +
-    snapshot.error
-        .toString());
-    if (snapshot.data=="success") {
+          body: SingleChildScrollView(
+          child: FutureBuilder<String>(
+          future: jobDetail(),
+      builder: (BuildContext context,
+      AsyncSnapshot<String> snapshot) {
+      print("objectPrint" +
+      snapshot.error
+          .toString());
+      if (snapshot.data=="success") {
 
-      return
+        return
 
 
+          Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+        Card(
+        elevation: 5,
+        margin: EdgeInsets.all(10),
+        child:
+        Container(
+        padding: EdgeInsets.all(5),
+
+        child:
         Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-      Card(
-      elevation: 5,
-      margin: EdgeInsets.all(10),
-      child:
-      Container(
-      padding: EdgeInsets.all(5),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+        Container(
 
-      child:
-      Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-      Container(
+        child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
 
-      child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+        Wrap(
+        // spacing: 0.5,
 
-      children: [
-      Wrap(
-      // spacing: 0.5,
+        children: [
 
-      children: [
+        Container(
+        width: size.width*0.7,
+        padding:EdgeInsets.all(5.8),
+        child: Text(job_name,
+        style: TextStyle(color: kPrimaryColor, fontSize: 14,fontWeight: FontWeight.bold),),
+        ),
+        Container(
+        width:75,
+        padding:
+        EdgeInsets.symmetric(horizontal: 2, vertical: 5),
+        margin:
+        EdgeInsets.only(left: 3,bottom: 5,top: 5),
+        height: 30,
+        decoration: ShapeDecoration(
+        color: ksecondaryColor,
+        shape: RoundedRectangleBorder(
+        side: BorderSide(
+        width: 1.0,
+        style: BorderStyle.solid,
+        color: kPrimaryColor),
+        borderRadius: BorderRadius.all(Radius.circular(1)),
+        ),
+        ),
+        child: Text("\$${job_price}", style: TextStyle( color: kPrimaryColor),),
+        ),
 
-      Container(
-      width: size.width*0.7,
-      padding:EdgeInsets.all(5.8),
-      child: Text(job_name,
-      style: TextStyle(color: kPrimaryColor, fontSize: 14,fontWeight: FontWeight.bold),),
-      ),
-      Container(
-      width:75,
-      padding:
-      EdgeInsets.symmetric(horizontal: 2, vertical: 5),
-      margin:
-      EdgeInsets.only(left: 3,bottom: 5,top: 5),
-      height: 30,
-      decoration: ShapeDecoration(
-      color: ksecondaryColor,
-      shape: RoundedRectangleBorder(
-      side: BorderSide(
-      width: 1.0,
-      style: BorderStyle.solid,
-      color: kPrimaryColor),
-      borderRadius: BorderRadius.all(Radius.circular(1)),
-      ),
-      ),
-      child: Text("\$${job_price}/H", style: TextStyle( color: kPrimaryColor),),
-      ),
+        ])
+        ],
+        ),
 
-      ])
-      ],
-      ),
-
-      ),
+        ),
 
 
-      Container(
-      width: width,
+        Container(
+        width: width,
 
 
-      child: Wrap(
-      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //  mainAxisSize: MainAxisSize.max,
-      children: [
+        child: Wrap(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //  mainAxisSize: MainAxisSize.max,
+        children: [
 
-      Container(
+        Container(
 
-      child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+        child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
 
-      Container(
-      padding: EdgeInsets.all(2.8),
-      child: Wrap(
-      children: [
-      Image.asset('assets/images/location.png',
-      height: 20,
-      width: 20,),
-      SizedBox(width: 5,),
-      Text(address,
-      style: TextStyle(fontSize: 11),),
-      ],
-      ),
-      ),
-      Container(
-      padding: EdgeInsets.all(2.8),
-      child: Wrap(
+        Container(
+        padding: EdgeInsets.all(2.8),
+        child: Wrap(
+        children: [
+        Image.asset('assets/images/location.png',
+        height: 20,
+        width: 20,),
+        SizedBox(width: 5,),
+        Text(address,
+        style: TextStyle(fontSize: 11),),
+        ],
+        ),
+        ),
+        Container(
+        padding: EdgeInsets.all(2.8),
+        child: Wrap(
 
-      children: [
-      Image.asset('assets/images/shift_date.png',
-      height: 18,
-      width: 20,),
-      SizedBox(width: 5,),
-      Text('Shift Date :', style: TextStyle(fontSize: 11),),
-      Text(shift_date, style: TextStyle(fontSize: 11),),
-      ],
-      ),
-      ),
-      Container(
-      padding: EdgeInsets.all(2.8),
-      child: Wrap(
-      children: [
-      Image.asset('assets/images/shift_time.png',
-      height: 18,
-      width: 20,),
-      SizedBox(width: 5,),
-      Text('Shift Time :', style: TextStyle(fontSize: 11),),
-      Text('${shift_start_time}AM To ${shift_end_time}PM', style: TextStyle(fontSize: 11),),
-      ],
-      ),
-      ),
-      Container(
-      padding:EdgeInsets.all(2.8),
-      child: Text(job_description,
-      style: TextStyle( fontSize: 10),),
-      ),
-      ],
-      ),
-      ),
+        children: [
+        Image.asset('assets/images/shift_date.png',
+        height: 18,
+        width: 20,),
+        SizedBox(width: 5,),
+        Text('Shift Date :', style: TextStyle(fontSize: 11),),
+        Text(shift_date, style: TextStyle(fontSize: 11),),
+        ],
+        ),
+        ),
+        Container(
+        padding: EdgeInsets.all(2.8),
+        child: Wrap(
+        children: [
+        Image.asset('assets/images/shift_time.png',
+        height: 18,
+        width: 20,),
+        SizedBox(width: 5,),
+        Text('Shift Time :', style: TextStyle(fontSize: 11),),
+        Text('${shift_start_time}To ${shift_end_time}', style: TextStyle(fontSize: 11),),
+        ],
+        ),
+        ),
+        Container(
+        padding:EdgeInsets.all(2.8),
+        child: Text(job_description,
+        style: TextStyle( fontSize: 10),),
+        ),
+        ],
+        ),
+        ),
 
 
-      ],
-      ),
+        ],
+        ),
 
-      ),
-      Container(
-      width: width,
-      padding: EdgeInsets.all(5),
-      child:
-      Wrap(
-      spacing: 2,
-      children: [
+        ),
+        Container(
+        width: width,
+        padding: EdgeInsets.all(5),
+        child:
+        Wrap(
+        spacing: 2,
+        children: [
 
-      Container(
+        Container(
 
-      padding:
-      EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-      margin:
-      EdgeInsets.only(left: 0,bottom: 5,right: 5),
-      height: 30,
-      decoration: ShapeDecoration(
-      color: Colors.grey,
-      shape: RoundedRectangleBorder(
-      side: BorderSide(
-      width: 1.0,
-      style: BorderStyle.solid,
-      color: kPrimaryColor,),
-      borderRadius: BorderRadius.all(Radius.circular(5)),
-      ),
-      ),
-      child: Text("Start Shift",
-      style: TextStyle( color: Colors.white),),
-      ),
-      Container(
-      padding:
-      EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-      margin:
-      EdgeInsets.only(left: 0,bottom: 5),
-      height: 30,
-      decoration: ShapeDecoration(
-      color: Colors.grey,
-      shape: RoundedRectangleBorder(
-      side: BorderSide(
-      width: 1.0,
-      style: BorderStyle.solid,
-      color: Color(0xffc4c4c4),),
-      borderRadius: BorderRadius.all(Radius.circular(5)),
-      ),
-      ),
-      child: Text("End  Shift", style: TextStyle( color: Colors.black),),
-      ),
-      ])
-      ),
-      Divider(
-      height: 5,
-      thickness: 1,
-      color: Colors.grey,
-      ),
+        padding:
+        EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+        margin:
+        EdgeInsets.only(left: 0,bottom: 5,right: 5),
+        height: 30,
+        decoration: ShapeDecoration(
+        color: Colors.grey,
+        shape: RoundedRectangleBorder(
+        side: BorderSide(
+        width: 1.0,
+        style: BorderStyle.solid,
+        color: Colors.grey,),
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+        ),
+        ),
+        child: Text("Start Shift",
+        style: TextStyle( color: Colors.white),),
+        ),
+        Container(
+        padding:
+        EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+        margin:
+        EdgeInsets.only(left: 0,bottom: 5),
+        height: 30,
+        decoration: ShapeDecoration(
+        color: Colors.grey,
+        shape: RoundedRectangleBorder(
+        side: BorderSide(
+        width: 1.0,
+        style: BorderStyle.solid,
+        color: Color(0xffc4c4c4),),
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+        ),
+        ),
+        child: Text("End  Shift", style: TextStyle( color: Colors.white),),
+        ),
+        ])
+        ),
+        Divider(
+        height: 5,
+        thickness: 1,
+        color: Colors.grey,
+        ),
 
-      FittedBox(
-      child:
-      Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        FittedBox(
+        child:
+        Row(
+          children: [
+            /*  Container(
+                          padding:EdgeInsets.all(8.8),
+                          child: Text('Client Name :',
+                            style: TextStyle(color: Colors.black,
+                                fontSize: 16,fontWeight: FontWeight.w600),),
+                        ),
 
-      children: [
-      Row(
-      children: [
-      Container(
-      padding:EdgeInsets.all(8.8),
-      child: Text('Client Name :',
-      style: TextStyle(color: Colors.black,
-      fontSize: 16,fontWeight: FontWeight.w600),),
-      ),
 
-      Container(
-      padding:EdgeInsets.all(8.8),
-      child: Text(client_name,
-      style: TextStyle(color: Colors.black, fontSize: 16),),
-      ),
-      ],
-      ),
 
-      Container(
-      padding:EdgeInsets.all(8.8),
-      child: Text(job_status,
-      style: TextStyle(color: Colors.red, fontSize: 16,fontWeight: FontWeight.w600),),
-      ),
-      ],
-      ),
-      ),
-      ],
-      ),
-      ),
-      ),
-      /*
-            Card(
-              elevation: 5,
-              margin: EdgeInsets.all(10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                        Container(
+                          padding:EdgeInsets.all(8.8),
+                          child: Text(client_name,
+                            style: TextStyle(color: Colors.black, fontSize: 16),),
+                        ),
+
+                       */
+            Container(
+              width: width*0.72,
+              child:
+              Row(
                 children: [
                   Container(
-                    width: width,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Container(
-                          width: size.width*0.6,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding:EdgeInsets.all(2.8),
-                                child: Text('Sugar Patient Checkup',
-                                  style: TextStyle(color: kPrimaryColor, fontSize: 16),),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(2.8),
-                                child: Wrap(
-                                  children: [
-                                    Image.asset('assets/images/location.png',
-                                      height: 20,
-                                      width: 20,),
-                                    SizedBox(width: 5,),
-
-                                    Text('Port Washington North,New York ', style: TextStyle(fontSize: 12),),
-
-
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(2.8),
-                                child: Wrap(
-
-                                  children: [
-                                    Image.asset('assets/images/shift_date.png',
-                                      height: 18,
-                                      width: 20,),
-                                    SizedBox(width: 5,),
-                                    Text('Shift Date :', style: TextStyle(fontSize: 12),),
-                                    Text('14-09-2021', style: TextStyle(fontSize: 12),),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(2.8),
-                                child: Wrap(
-                                  children: [
-                                    Image.asset('assets/images/shift_time.png',
-                                      height: 18,
-                                      width: 20,),
-                                    SizedBox(width: 5,),
-                                    Text('Shift Time :', style: TextStyle(fontSize: 12),),
-                                   // Text('11:00 AM To 01:30 PM', style: TextStyle(fontSize: 12),),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                padding:EdgeInsets.all(2.8),
-                                child: Text('Sugar Patient Checkup Sugar Patient Checkup Sugar Patient Checkup Sugar Patient Checkup Sugar Patient Checkup',
-                                  style: TextStyle( fontSize: 12),),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Column(
-                            children: [
-                              Container(
-                                width:75,
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-                                margin:
-                                EdgeInsets.only(left: 3,bottom: 5),
-                                height: 30,
-                                decoration: ShapeDecoration(
-                                  color: ksecondaryColor,
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                        width: 1.0,
-                                        style: BorderStyle.solid,
-                                        color: kPrimaryColor),
-                                    borderRadius: BorderRadius.all(Radius.circular(1)),
-                                  ),
-                                ),
-                                child: Text("110/H", style: TextStyle( color: kPrimaryColor),),
-                              ),
-                              Container(
-
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-                                margin:
-                                EdgeInsets.only(left: 3,bottom: 5,right: 5),
-                                height: 30,
-                                decoration: ShapeDecoration(
-                                  color: Colors.grey,
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      width: 1.0,
-                                      style: BorderStyle.solid,
-                                      color: Color(0xffc4c4c4),),
-                                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                                  ),
-                                ),
-                                child:  Text("Start Shift", style: TextStyle( color: Colors.black),),
-                              ),
-                              Container(
-                                padding:
-                                EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-                                margin:
-                                EdgeInsets.only(left: 3,bottom: 5),
-                                height: 30,
-                                decoration: ShapeDecoration(
-                                  color: Colors.grey,
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      width: 1.0,
-                                      style: BorderStyle.solid,
-                                      color: Color(0xffc4c4c4),),
-                                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                                  ),
-                                ),
-                                child:  Text("End  Shift", style: TextStyle( color: Colors.black),),
-                              ),
-
-
-                            ],
-                          ),
-                        ),
-
-
-                      ],
-                    ),
+                    padding: EdgeInsets.fromLTRB(2.8,2.8,2.8,10),
+                    child: Text('Client Name :',
+                      style: TextStyle(color: Colors.black,
+                          fontSize: 13, fontWeight: FontWeight.w600),),
                   ),
-                  Divider(
-                    height: 5,
-                    thickness: 1,
-                    color: Colors.grey,
-                  ),
-                  Wrap(
-                 crossAxisAlignment: WrapCrossAlignment.start,
 
-                    children: [
-                      Container(
-                        width: width*0.67,
-                        child:
-                        Wrap(
-
-
-
-                        children: [
-                          Container(
-                            padding:EdgeInsets.all(2.8),
-                            child: Text('Client Name :',
-                              style: TextStyle(color: Colors.black,
-                                  fontSize: 13,fontWeight: FontWeight.w600),),
-                          ),
-
-                          Container(
-                            padding:EdgeInsets.all(2.8),
-                            child: Text('Benjium William',
-                              style: TextStyle(color: Colors.black, fontSize: 13),),
-                          ),
-                        ],
-                      ),
-                      ),
-
-                      Container(
-                        padding:EdgeInsets.all(2.8),
-                        child: Text('Complete',
-                          style: TextStyle(color: Colors.green, fontSize: 16,fontWeight: FontWeight.w600),),
-                      ),
-                    ],
+                  Container(
+                    width: width*0.35,
+                    padding: EdgeInsets.fromLTRB(2.8,2.8,2.8,10),
+                    child:  Text(client_name ,
+                      style: TextStyle(
+                          color: Colors.black, fontSize: 13),),
                   ),
                 ],
               ),
             ),
 
-             */
-      Container(
-      padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-
-      child: Wrap(
-      children: [
-      Text('Total Working Time :',
-      style: TextStyle(color: kPrimaryColor,
-      fontSize: 18,fontWeight: FontWeight.w600),),
-      Text("",
-      style: TextStyle(color: kPrimaryColor,
-      fontSize: 18,fontWeight: FontWeight.w600),),
-      ],
-      ),
-      ),
-      Container(
-      padding: EdgeInsets.symmetric(horizontal: 5),
-
-      child: Wrap(
-      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-      Container(
-
-      padding: EdgeInsets.all(2.0),
-      decoration: BoxDecoration(
-      color: Colors.grey.shade400,
-      borderRadius: BorderRadius.all(
-      Radius.circular(8)
-      )
-      ),
-      child:Container(
-      decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.all(
-      Radius.circular(5)
-      )
-      ),
-
-      child: Column(
-      children: [
-      Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Image.asset('assets/images/checkin.png',
-      width: width/4,
-      height: width/10,
-      ),
-      ),
-      Container(
-      padding:EdgeInsets.all(2.8),
-      child: Text('${check_in} AM',
-      style: TextStyle(color: Colors.black,
-      fontSize: 12,fontWeight: FontWeight.w600),),
-      ),
-      Container(
-      padding:EdgeInsets.all(2.8),
-      child: Text('Check In Time',
-      style: TextStyle(color: Colors.black,
-      fontSize: 12,fontWeight: FontWeight.w600),),
-      ),
-      ],
-      ),
-      ) ,
-      ),
-      Container(
-
-      padding: EdgeInsets.all(2.0),
-      decoration: BoxDecoration(
-      color: Colors.grey.shade400,
-      borderRadius: BorderRadius.all(
-      Radius.circular(8)
-      )
-      ),
-      child:Container(
-      decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.all(
-      Radius.circular(5)
-      )
-      ),
-
-      child: Column(
-      children: [
-      Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Image.asset('assets/images/check_out.png',
-      width: width/4,
-      height: width/10,
-      ),
-      ),
-      Container(
-      padding:EdgeInsets.all(2.8),
-      child: Text('${check_out} PM',
-      style: TextStyle(color: Colors.black,
-      fontSize: 12,fontWeight: FontWeight.w600),),
-      ),
-      Container(
-      padding:EdgeInsets.all(2),
-      child: Text('Check Out Time',
-      style: TextStyle(color: Colors.black,
-      fontSize: 12,fontWeight: FontWeight.w600),),
-      ),
-      ],
-      ),
-      ) ,
-      ),
-      Container(
-
-      padding: EdgeInsets.all(2.0),
-      decoration: BoxDecoration(
-      color: Colors.grey.shade400,
-      borderRadius: BorderRadius.all(
-      Radius.circular(8)
-      )
-      ),
-      child:Container(
-      decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.all(
-      Radius.circular(5)
-      )
-      ),
-
-      child: Column(
-      children: [
-      Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Image.asset('assets/images/break_hr.png',
-      width: width/4,
-      height: width/10,
-      ),
-      ),
-      Container(
-      padding:EdgeInsets.all(2.8),
-      child: Text('${break_time} AM',
-      style: TextStyle(color: Colors.black,
-      fontSize: 12,fontWeight: FontWeight.w600),),
-      ),
-      Container(
-      padding:EdgeInsets.all(2.8),
-      child: Text('  Break Hour ',
-      style: TextStyle(color: Colors.black,
-      fontSize: 12,fontWeight: FontWeight.w600),),
-      ),
-      ],
-      ),
-      ) ,
-      ),
-      ],
-      ),
-      ),
-      Container(
-      padding:EdgeInsets.all(10),
-      child: Text('Client Review ',
-      style: TextStyle(color: Colors.black,
-      fontSize: 16,fontWeight: FontWeight.normal),),
-      ),
-      Container(
-      margin: EdgeInsets.only(left: 10, right: 10),
-      height: 150,
-      child: TextFormField(
-      keyboardType: TextInputType.text,
-      controller: reviewController,
-      maxLines: 20,
-
-
-      //maxLength: 10,
-      cursorColor: Colors.blue,
-      //validator: validateUsername,
-      decoration: InputDecoration(
-      labelStyle:
-      TextStyle(color: Colors.black),
-
-      counterStyle: TextStyle(
-      height: double.minPositive,
-      ),
-      counterText: "",
-      // icon: Icon(
-      //   Icons.phone,
-      //   color: kSecondaryLightColor,
-      // ),
-      // labelText:" All_Lan().phoneno",
-      border: OutlineInputBorder(
-      /* borderRadius: BorderRadius.circular(5),
-                                      borderSide: BorderSide(width: 1, color: kSecondaryLightColor),*/
-      ),
-      /*focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(width: 1, color: kSecondaryLightColor),
-                                      borderRadius: BorderRadius.circular(5),
-                                    )*/),
-      ),
-      ),
-      Container(
-      padding:EdgeInsets.all(10),
-      child: Text('Digital Signature',
-      style: TextStyle(color: Colors.black,
-      fontSize: 16,fontWeight: FontWeight.normal),),
-      ),
-
-
-    Container(
-      margin: EdgeInsets.only(left: 10, right: 10),
-      height: 150,
-      decoration: BoxDecoration(
-      color: Colors.white,
-      /*image: DecorationImage(
-                  image: NetworkImage('http://i.imgur.com/QSev0hg.jpg'),
-                  fit: BoxFit.cover,
-                ),*/
-      borderRadius: BorderRadius.all( Radius.circular(10.0)),
-      border: Border.all(
-      color: Colors.grey,
-      width: 1.0,
-      ),
-      ),
-      child: SfSignaturePad(
-      key: _signaturePadKey,
-      backgroundColor: Colors.grey[200],
-      ),
-      ),
-        /*Container(
-          margin: EdgeInsets.only(left: 10, right: 10),
-          height: 150,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            /*image: DecorationImage(
-                  image: NetworkImage('http://i.imgur.com/QSev0hg.jpg'),
-                  fit: BoxFit.cover,
-                ),*/
-            borderRadius: BorderRadius.all( Radius.circular(10.0)),
-            border: Border.all(
-              color: Colors.grey,
-              width: 1.0,
+            Container(
+              padding: EdgeInsets.fromLTRB(2.8,2.8,2.8,10),
+              child: Text(job_status,
+                style: TextStyle(color: completecolor,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600),),
             ),
-          ),
-          child: Image.file(fds!),
+          ],
+        ),
+        ),
+        ],
+        ),
+        ),
+        ),
+        /*
+              Card(
+                elevation: 5,
+                margin: EdgeInsets.all(10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: width,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Container(
+                            width: size.width*0.6,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding:EdgeInsets.all(2.8),
+                                  child: Text('Sugar Patient Checkup',
+                                    style: TextStyle(color: kPrimaryColor, fontSize: 16),),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(2.8),
+                                  child: Wrap(
+                                    children: [
+                                      Image.asset('assets/images/location.png',
+                                        height: 20,
+                                        width: 20,),
+                                      SizedBox(width: 5,),
+
+                                      Text('Port Washington North,New York ', style: TextStyle(fontSize: 12),),
+
+
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(2.8),
+                                  child: Wrap(
+
+                                    children: [
+                                      Image.asset('assets/images/shift_date.png',
+                                        height: 18,
+                                        width: 20,),
+                                      SizedBox(width: 5,),
+                                      Text('Shift Date :', style: TextStyle(fontSize: 12),),
+                                      Text('14-09-2021', style: TextStyle(fontSize: 12),),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(2.8),
+                                  child: Wrap(
+                                    children: [
+                                      Image.asset('assets/images/shift_time.png',
+                                        height: 18,
+                                        width: 20,),
+                                      SizedBox(width: 5,),
+                                      Text('Shift Time :', style: TextStyle(fontSize: 12),),
+                                     // Text('11:00 AM To 01:30 PM', style: TextStyle(fontSize: 12),),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  padding:EdgeInsets.all(2.8),
+                                  child: Text('Sugar Patient Checkup Sugar Patient Checkup Sugar Patient Checkup Sugar Patient Checkup Sugar Patient Checkup',
+                                    style: TextStyle( fontSize: 12),),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            child: Column(
+                              children: [
+                                Container(
+                                  width:75,
+                                  padding:
+                                  EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+                                  margin:
+                                  EdgeInsets.only(left: 3,bottom: 5),
+                                  height: 30,
+                                  decoration: ShapeDecoration(
+                                    color: ksecondaryColor,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          width: 1.0,
+                                          style: BorderStyle.solid,
+                                          color: kPrimaryColor),
+                                      borderRadius: BorderRadius.all(Radius.circular(1)),
+                                    ),
+                                  ),
+                                  child: Text("110/H", style: TextStyle( color: kPrimaryColor),),
+                                ),
+                                Container(
+
+                                  padding:
+                                  EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+                                  margin:
+                                  EdgeInsets.only(left: 3,bottom: 5,right: 5),
+                                  height: 30,
+                                  decoration: ShapeDecoration(
+                                    color: Colors.grey,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                        width: 1.0,
+                                        style: BorderStyle.solid,
+                                        color: Color(0xffc4c4c4),),
+                                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                                    ),
+                                  ),
+                                  child:  Text("Start Shift", style: TextStyle( color: Colors.black),),
+                                ),
+                                Container(
+                                  padding:
+                                  EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+                                  margin:
+                                  EdgeInsets.only(left: 3,bottom: 5),
+                                  height: 30,
+                                  decoration: ShapeDecoration(
+                                    color: Colors.grey,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                        width: 1.0,
+                                        style: BorderStyle.solid,
+                                        color: Color(0xffc4c4c4),),
+                                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                                    ),
+                                  ),
+                                  child:  Text("End  Shift", style: TextStyle( color: Colors.black),),
+                                ),
+
+
+                              ],
+                            ),
+                          ),
+
+
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      height: 5,
+                      thickness: 1,
+                      color: Colors.grey,
+                    ),
+                    Wrap(
+                   crossAxisAlignment: WrapCrossAlignment.start,
+
+                      children: [
+                        Container(
+                          width: width*0.67,
+                          child:
+                          Wrap(
+
+
+
+                          children: [
+                            Container(
+                              padding:EdgeInsets.all(2.8),
+                              child: Text('Client Name :',
+                                style: TextStyle(color: Colors.black,
+                                    fontSize: 13,fontWeight: FontWeight.w600),),
+                            ),
+
+                            Container(
+                              padding:EdgeInsets.all(2.8),
+                              child: Text('Benjium William',
+                                style: TextStyle(color: Colors.black, fontSize: 13),),
+                            ),
+                          ],
+                        ),
+                        ),
+
+                        Container(
+                          padding:EdgeInsets.all(2.8),
+                          child: Text('Complete',
+                            style: TextStyle(color: Colors.green, fontSize: 16,fontWeight: FontWeight.w600),),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+               */
+        Container(
+        padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+
+        child: Wrap(
+        children: [
+        Text('Total Working Time :',
+        style: TextStyle(color: kPrimaryColor,
+        fontSize: 18,fontWeight: FontWeight.w600),),
+        Text("",
+        style: TextStyle(color: kPrimaryColor,
+        fontSize: 18,fontWeight: FontWeight.w600),),
+        ],
+        ),
+        ),
+        Container(
+        padding: EdgeInsets.symmetric(horizontal: 5),
+
+        child: Wrap(
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+        Container(
+
+        padding: EdgeInsets.all(2.0),
+        decoration: BoxDecoration(
+        color: Colors.grey.shade400,
+        borderRadius: BorderRadius.all(
+        Radius.circular(8)
+        )
+        ),
+        child:Container(
+        decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+        Radius.circular(5)
+        )
+        ),
+
+        child: Column(
+        children: [
+        Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Image.asset('assets/images/checkin.png',
+        width: width/4,
+        height: width/10,
+        ),
+        ),
+        Container(
+        padding:EdgeInsets.all(2.8),
+        child: Text('${check_in} ',
+        style: TextStyle(color: Colors.black,
+        fontSize: 12,fontWeight: FontWeight.w600),),
+        ),
+        Container(
+        padding:EdgeInsets.all(2.8),
+        child: Text('Check In Time',
+        style: TextStyle(color: Colors.black,
+        fontSize: 12,fontWeight: FontWeight.w600),),
+        ),
+        ],
+        ),
+        ) ,
+        ),
+        Container(
+
+        padding: EdgeInsets.all(2.0),
+        decoration: BoxDecoration(
+        color: Colors.grey.shade400,
+        borderRadius: BorderRadius.all(
+        Radius.circular(8)
+        )
+        ),
+        child:Container(
+        decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+        Radius.circular(5)
+        )
+        ),
+
+        child: Column(
+        children: [
+        Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Image.asset('assets/images/check_out.png',
+        width: width/4,
+        height: width/10,
+        ),
+        ),
+        Container(
+        padding:EdgeInsets.all(2.8),
+        child: Text('${check_out}',
+        style: TextStyle(color: Colors.black,
+        fontSize: 12,fontWeight: FontWeight.w600),),
+        ),
+        Container(
+        padding:EdgeInsets.all(2),
+        child: Text('Check Out Time',
+        style: TextStyle(color: Colors.black,
+        fontSize: 12,fontWeight: FontWeight.w600),),
+        ),
+        ],
+        ),
+        ) ,
+        ),
+        Container(
+
+        padding: EdgeInsets.all(2.0),
+        decoration: BoxDecoration(
+        color: Colors.grey.shade400,
+        borderRadius: BorderRadius.all(
+        Radius.circular(8)
+        )
+        ),
+        child:Container(
+        decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+        Radius.circular(5)
+        )
+        ),
+
+        child: Column(
+        children: [
+        Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Image.asset('assets/images/break_hr.png',
+        width: width/4,
+        height: width/10,
+        ),
+        ),
+        Container(
+        padding:EdgeInsets.all(2.8),
+        child: Text('${break_time} min',
+        style: TextStyle(color: Colors.black,
+        fontSize: 12,fontWeight: FontWeight.w600),),
+        ),
+        Container(
+        padding:EdgeInsets.all(2.8),
+        child: Text('  Break Hour ',
+        style: TextStyle(color: Colors.black,
+        fontSize: 12,fontWeight: FontWeight.w600),),
+        ),
+        ],
+        ),
+        ) ,
+        ),
+        ],
+        ),
+        ),
+        Container(
+        padding:EdgeInsets.all(10),
+        child: Text('Client Review ',
+        style: TextStyle(color: Colors.black,
+        fontSize: 16,fontWeight: FontWeight.normal),),
+        ),
+        Container(
+        margin: EdgeInsets.only(left: 10, right: 10),
+        height: 150,
+        child: TextFormField(
+        keyboardType: TextInputType.text,
+        controller: reviewController,
+        maxLines: 20,
+
+
+        //maxLength: 10,
+        cursorColor: Colors.blue,
+        //validator: validateUsername,
+        decoration: InputDecoration(
+        labelStyle:
+        TextStyle(color: Colors.black),
+
+        counterStyle: TextStyle(
+        height: double.minPositive,
+        ),
+        counterText: "",
+        // icon: Icon(
+        //   Icons.phone,
+        //   color: kSecondaryLightColor,
+        // ),
+        // labelText:" All_Lan().phoneno",
+        border: OutlineInputBorder(
+        /* borderRadius: BorderRadius.circular(5),
+                                        borderSide: BorderSide(width: 1, color: kSecondaryLightColor),*/
+        ),
+        /*focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(width: 1, color: kSecondaryLightColor),
+                                        borderRadius: BorderRadius.circular(5),
+                                      )*/),
+        ),
+        ),
+        Container(
+        padding:EdgeInsets.all(10),
+        child: Text('Digital Signature',
+        style: TextStyle(color: Colors.black,
+        fontSize: 16,fontWeight: FontWeight.normal),),
         ),
 
 
-      FlatButton (
-      child: Text("Upload"),
-      onPressed:()  async {
-        // ignore: unused_local_variable
-        file1 = await _picker.pickImage(
-            source: ImageSource.gallery,
-            imageQuality: 100,
-            maxWidth: 800,
-            maxHeight: 600);
-        f1 = File(file1.path);
-        {
-      /*  final data =
+      Container(
+        margin: EdgeInsets.only(left: 10, right: 10),
+        height: 150,
+        decoration: BoxDecoration(
+        color: Colors.white,
+        /*image: DecorationImage(
+                    image: NetworkImage('http://i.imgur.com/QSev0hg.jpg'),
+                    fit: BoxFit.cover,
+                  ),*/
+        borderRadius: BorderRadius.all( Radius.circular(10.0)),
+        border: Border.all(
+        color: Colors.grey,
+        width: 1.0,
+        ),
+        ),
+        child: SfSignaturePad(
+        key: _signaturePadKey,
+        backgroundColor: Colors.grey[200],
+        ),
+        ),
+          /*Container(
+            margin: EdgeInsets.only(left: 10, right: 10),
+            height: 150,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              /*image: DecorationImage(
+                    image: NetworkImage('http://i.imgur.com/QSev0hg.jpg'),
+                    fit: BoxFit.cover,
+                  ),*/
+              borderRadius: BorderRadius.all( Radius.circular(10.0)),
+              border: Border.all(
+                color: Colors.grey,
+                width: 1.0,
+              ),
+            ),
+            child: Image.file(fds!),
+          ),
+
+
+        FlatButton (
+        child: Text("Upload"),
+        onPressed:()  async {
+          // ignore: unused_local_variable
+          file1 = await _picker.pickImage(
+              source: ImageSource.gallery,
+              imageQuality: 100,
+              maxWidth: 800,
+              maxHeight: 600);
+          f1 = File(file1.path);
+          {
+        /*  final data =
+          await _signaturePadKey.currentState!.toImage(pixelRatio: 3.0);
+
+          bytes = await data.toByteData(format: ui.ImageByteFormat.png);
+
+
+          if (bytes
+              .toString()
+              .isNotEmpty) {
+             fds = await writeToFileF(bytes);
+
+         */
+
+            /*
+
+                                            ByteData? byteData = await (file1.toByteData(format: ui.ImageByteFormat.png) as FutureOr<ByteData?>);
+                                            if (byteData != null) {
+                                              final result =
+                                              await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
+                                              print("###############${result}");
+
+                                             */
+            setState(() {
+              file = f1;
+            });
+            //  final directory = await getApplicationDocumentsDirectory();
+
+            //  final String path =  directory.path;
+
+
+            //
+
+            //final String path = await getApplicationDocumentsDirectory());
+
+// copy the file to a new path
+            //   final File newImage = await f1.copy('${path}/file1.jpeg');
+
+
+            //print("hi.......................................................${newImage.path}");
+
+
+          }
+
+
+          // selectImage();
+
+        }),
+
+           */
+
+        Container(
+        padding: EdgeInsets.symmetric(horizontal: 30,vertical: 25),
+        child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+        GestureDetector(
+        onTap: (){
+          setState(() {
+            rate="3";
+          });
+
+        // Navigator.of(context).pop();
+
+        },
+        child:
+        Container(
+
+          child: Column(
+          children: [
+          Container(
+
+
+
+            decoration: BoxDecoration(
+              //color: rate== "2" ? Colors.green: ksecondaryColor,
+              shape: BoxShape.circle,
+              border: Border.all(width: 5.0,  color: rate=="3"? Colors.green: ksecondaryColor,),
+
+
+            ),
+
+            child: Image.asset('assets/images/happy.png',
+            height: 50,
+            width: 50,),
+          ),
+          Container(
+          padding:EdgeInsets.all(10),
+          child: Text('Happy ',
+          style: TextStyle(color: Colors.black,
+          fontSize: 16,fontWeight: FontWeight.normal),),
+          ),
+          ],
+          ),
+        )
+        ),
+        GestureDetector(
+        onTap: (){
+          setState(() {
+            rate="2";
+          });
+
+        },
+        child:
+        Container(
+
+          child: Column(
+          children: [
+          Container(
+            // width: 75,
+            // height: 90,
+            decoration: BoxDecoration(
+              //color: rate== "2" ? Colors.green: ksecondaryColor,
+              shape: BoxShape.circle,
+              border: Border.all(width: 5.0, color: rate== "2" ? Colors.green: ksecondaryColor),
+
+
+            ),
+            child: Image.asset('assets/images/normal.png',
+            height: 50,
+            width: 50,),
+          ),
+          Container(
+          padding:EdgeInsets.all(10),
+          child: Text('Normal',
+          style: TextStyle(color: Colors.black,
+          fontSize: 16,fontWeight: FontWeight.normal),),
+          ),
+          ],
+          ),
+        )),
+
+        Column(
+        children: [
+        GestureDetector(
+        onTap: (){
+        // Navigator.of(context).pop();
+          setState(() {
+            rate="1";
+          });
+
+        },
+        child:
+        Container(
+
+          // width: 75,
+          // height: 90,
+          decoration: BoxDecoration(
+            //color: rate== "2" ? Colors.green: ksecondaryColor,
+            shape: BoxShape.circle,
+            border: Border.all(width: 5.0,color: rate== "1" ? Colors.green: ksecondaryColor,),
+
+
+          ),
+          child: Image.asset('assets/images/sad.png',
+          height: 50,
+          width: 50,),
+        )),
+        Container(
+        padding:EdgeInsets.all(10),
+        child: Text('Sad ',
+        style: TextStyle(color: Colors.black,
+        fontSize: 16,fontWeight: FontWeight.normal),),
+        ),
+        ],
+        ),
+        ],
+        ),
+        ),
+        Container(
+        margin: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+        width: size.width * 0.95,
+        child: ClipRRect(
+        borderRadius: BorderRadius.circular(5),
+        // ignore: deprecated_member_use
+        child: FlatButton(
+        padding: EdgeInsets.symmetric(
+        vertical: 20, horizontal: 20),
+        color: kPrimaryColor,
+        onPressed: ()  async {
+
+        final data =
         await _signaturePadKey.currentState!.toImage(pixelRatio: 3.0);
 
         bytes = await data.toByteData(format: ui.ImageByteFormat.png);
@@ -781,174 +998,46 @@ class _WorksheetScreenState extends State<WorksheetScreen> {
         if (bytes
             .toString()
             .isNotEmpty) {
-           fds = await writeToFileF(bytes);
-
-       */
-
-          /*
-
-                                          ByteData? byteData = await (file1.toByteData(format: ui.ImageByteFormat.png) as FutureOr<ByteData?>);
-                                          if (byteData != null) {
-                                            final result =
-                                            await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
-                                            print("###############${result}");
-
-                                           */
-          setState(() {
-            file = f1;
-          });
-          //  final directory = await getApplicationDocumentsDirectory();
-
-          //  final String path =  directory.path;
-
-
-          //
-
-          //final String path = await getApplicationDocumentsDirectory());
-
-// copy the file to a new path
-          //   final File newImage = await f1.copy('${path}/file1.jpeg');
-
-
-          //print("hi.......................................................${newImage.path}");
-
-
-        }
-
-
-        // selectImage();
-
-      }),
-
-         */
-
-      Container(
-      padding: EdgeInsets.symmetric(horizontal: 30,vertical: 25),
-      child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-      GestureDetector(
-      onTap: (){
-      rate="3";
-      // Navigator.of(context).pop();
-
-      },
-      child:
-      Column(
-      children: [
-      Image.asset('assets/images/happy.png',
-      height: 50,
-      width: 50,),
-      Container(
-      padding:EdgeInsets.all(10),
-      child: Text('Happy ',
-      style: TextStyle(color: Colors.black,
-      fontSize: 16,fontWeight: FontWeight.normal),),
-      ),
-      ],
-      )
-      ),
-      GestureDetector(
-      onTap: (){
-      rate="2";
-      },
-      child:
-      Column(
-      children: [
-      Image.asset('assets/images/normal.png',
-      height: 50,
-      width: 50,),
-      Container(
-      padding:EdgeInsets.all(10),
-      child: Text('Normal',
-      style: TextStyle(color: Colors.black,
-      fontSize: 16,fontWeight: FontWeight.normal),),
-      ),
-      ],
-      )),
-
-      Column(
-      children: [
-      GestureDetector(
-      onTap: (){
-      // Navigator.of(context).pop();
-      rate="1";
-      },
-      child:
-      Image.asset('assets/images/sad.png',
-      height: 50,
-      width: 50,)),
-      Container(
-      padding:EdgeInsets.all(10),
-      child: Text('Sad ',
-      style: TextStyle(color: Colors.black,
-      fontSize: 16,fontWeight: FontWeight.normal),),
-      ),
-      ],
-      ),
-      ],
-      ),
-      ),
-      Container(
-      margin: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-      width: size.width * 0.95,
-      child: ClipRRect(
-      borderRadius: BorderRadius.circular(5),
-      // ignore: deprecated_member_use
-      child: FlatButton(
-      padding: EdgeInsets.symmetric(
-      vertical: 20, horizontal: 20),
-      color: kPrimaryColor,
-      onPressed: ()  async {
-
-      final data =
-      await _signaturePadKey.currentState!.toImage(pixelRatio: 3.0);
-
-      bytes = await data.toByteData(format: ui.ImageByteFormat.png);
-
-
-      if (bytes
-          .toString()
-          .isNotEmpty) {
-      fds = await writeToFileF(bytes);}
+        fds = await writeToFileF(bytes);}
 
 /*
-      final data =
-      await _signaturePadKey.currentState!.toImage(pixelRatio: 3.0);
+        final data =
+        await _signaturePadKey.currentState!.toImage(pixelRatio: 3.0);
 
-     bytes = await data.toByteData(format: ui.ImageByteFormat.png);
+       bytes = await data.toByteData(format: ui.ImageByteFormat.png);
 
 
-      if(bytes.toString().isNotEmpty){
-      File? f1= await writeToFileF(bytes);
+        if(bytes.toString().isNotEmpty){
+        File? f1= await writeToFileF(bytes);
 
  */
 
 
-      client_review_rating_sign(fds);
+        client_review_rating_sign(fds);
 
 
 
 
-      },
-      child: Center(
-      child: Text(
-      "SAVE",
-      style:
-      TextStyle(color: Colors.white, fontSize: 15),
-      ),
-      ),
-      ),
-      ),
-      ),
+        },
+        child: Center(
+        child: Text(
+        "SAVE",
+        style:
+        TextStyle(color: Colors.white, fontSize: 15),
+        ),
+        ),
+        ),
+        ),
+        ),
 
 
-      ],
-      );
+        ],
+        );
 
-    }
-    else{return SizedBox();}
-        })
+      }
+      else{return SizedBox();}
+          })
+        ),
       ),
     );
   }
@@ -1134,12 +1223,32 @@ class _WorksheetScreenState extends State<WorksheetScreen> {
         if(job_status=="0")
         {
           job_status="pending";
+          completecolor=Colors.red;
         }
         if(job_status == "1")
         {
           job_status="process";
+          completecolor=Colors.red;
         }
-        if(job_status == "2"){ job_status="complate";}
+        if(job_status == "3")
+        {
+          job_status="Review Updated";
+          completecolor=Colors.green;
+
+        }
+        if(job_status == "4")
+
+        {
+          completecolor=Colors.red;
+          job_status="Closed";
+
+        }
+        if(job_status == "2")
+        {
+          job_status="complete";
+          completecolor=Colors.green;
+
+        }
         if(check_in=="0")
         {
           start="0";

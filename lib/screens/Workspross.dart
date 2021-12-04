@@ -27,9 +27,11 @@ class _WorkShiftscreenState extends State<WorkShiftscreen> {
   String shift_date="";
   String shift_start_time="";
   String shift_end_time="";
+  String job_status="";
   String address="";
   String limit = '10';
   String offset = '0';
+  late List <String> job_status1= <String>[];
   late String id;
   Future<void> _selectDate(BuildContext context) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -704,181 +706,221 @@ class _WorkShiftscreenState extends State<WorkShiftscreen> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     Size size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-        child:Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:[
-            Container(
-                height: 650,
-                child: Container(
-                    child: FutureBuilder<siftModel>(
-                        future: jobsiftprocess(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<siftModel> snapshot) {
-                          if (snapshot.hasData) {
-                            print("objectPrint" +
-                                snapshot.data!.data[0].id
-                                    .toString());
-                            return
+    return RefreshIndicator(
+      onRefresh: refresh,
+      child: Container(
+        padding: EdgeInsets.only(top: 20),
 
-                              Expanded(
-                                child: ListView.builder(itemCount:  snapshot.data!.data.length, itemBuilder: (context, index) {
-                                  return
-                                    GestureDetector(
+        child: SingleChildScrollView(
+            child:Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[
+               /* GestureDetector(
+                  onTap: () {
+                    setState(() {
 
-                                      onTap: (){
-                                    //  print("ghdg");
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => bottomBar( bottom: 12,jobid:snapshot.data!.data[index].id,)));
-                                    // Shiftscreen();
+                    });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Refersh"),
+                      IconButton(
+                          icon: Icon(Icons.refresh),
+                          onPressed: () {
+                            setState(() {
 
-                                  },
-                                  child:
+                            });}
+                      )
+                    ],
 
-                                  Card(
-                                      elevation: 5,
-                                      margin: EdgeInsets.all(10),
-                                      child:
-                                      Container(
-                                        padding: EdgeInsets.all(5),
-                                        child: Column(
+                  ),
+                ),
+                */
+                Container(
+                    height: height*0.80,
+                    child: Container(
+                        child: FutureBuilder<siftModel>(
+                            future: jobsiftprocess(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<siftModel> snapshot) {
+                              if (snapshot.hasData) {
+                                print("objectPrint" +
+                                    snapshot.data!.data[0].id
+                                        .toString());
+                                return
 
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  Expanded(
+                                    child: RefreshIndicator(
+                                      onRefresh: refresh,
+                                      child: ListView.builder(itemCount:  snapshot.data!.data.length, itemBuilder: (context, index) {
+                                        return
+                                          GestureDetector(
 
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Wrap(
-                                              // spacing: 0.5,
+                                            onTap: (){
+                                          //  print("ghdg");
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => bottomBar( bottom: 12,jobid:snapshot.data!.data[index].id,)));
+                                          // Shiftscreen();
 
-                                              children: [
-                                                Container(
-                                                  padding: EdgeInsets.all(2.8),
-                                                  width: size.width * 0.7,
-                                                  child:  Text(
-                                                    '${snapshot.data!
-                                                        .data[index].job_name}',
-                                                    style: TextStyle(
-                                                        color: kPrimaryColor, fontSize: 16,fontWeight: FontWeight.bold),),
-                                                ),
-                                                Container(
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        },
+                                        child:
+
+                                        Card(
+                                            elevation: 5,
+                                            margin: EdgeInsets.all(10),
+                                            child:
+                                            Container(
+                                              padding: EdgeInsets.all(5),
+                                              child: Column(
+
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Wrap(
+                                                    // spacing: 0.5,
+
                                                     children: [
-                                                      /*  Container(
-
-                          padding:
-                          EdgeInsets.symmetric(
-                              horizontal: 7, vertical: 5),
-                          margin:
-                          EdgeInsets.only(left: 3, bottom: 5, right: 5),
-                          height: 30,
-                          decoration: ShapeDecoration(
-                            color: ksecondaryColor,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  width: 1.0,
-                                  style: BorderStyle.solid,
-                                  color: kPrimaryColor),
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(1)),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Image.asset('assets/images/map.png'),
-                              SizedBox(width: 3,),
-                              Text("Map",
-                                style: TextStyle(color: kPrimaryColor),),
-
-                            ],
-                          ),
-                        ),
-
-                       */
                                                       Container(
-
                                                         padding: EdgeInsets.all(2.8),
-                                                        margin:
-                                                        EdgeInsets.only(left: 3, bottom: 5),
+                                                        width: size.width * 0.7,
+                                                        child:  Text(
+                                                          '${snapshot.data!
+                                                              .data[index].job_name}',
+                                                          style: TextStyle(
+                                                              color: kPrimaryColor, fontSize: 16,fontWeight: FontWeight.bold),),
+                                                      ),
+                                                      Container(
+                                                        child: Column(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            /*  Container(
+
+                              padding:
+                              EdgeInsets.symmetric(
+                                  horizontal: 7, vertical: 5),
+                              margin:
+                              EdgeInsets.only(left: 3, bottom: 5, right: 5),
+                              height: 30,
+                              decoration: ShapeDecoration(
+                                color: ksecondaryColor,
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                        width: 1.0,
+                                        style: BorderStyle.solid,
+                                        color: kPrimaryColor),
+                                  borderRadius: BorderRadius.all(
+                                        Radius.circular(1)),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset('assets/images/map.png'),
+                                  SizedBox(width: 3,),
+                                  Text("Map",
+                                      style: TextStyle(color: kPrimaryColor),),
+
+                                ],
+                              ),
+                            ),
+
+                           */
+                                                            Container(
+
+                                                              padding: EdgeInsets.all(2.8),
+                                                              margin:
+                                                              EdgeInsets.only(left: 3, bottom: 5),
 
 
-                                                        child: Text(" \$110/H",
-                                                          style: TextStyle(color: kPrimaryColor,
-                                                              fontWeight: FontWeight.bold),),
+                                                              child: Text(" \$110/H",
+                                                                style: TextStyle(color: kPrimaryColor,
+                                                                    fontWeight: FontWeight.bold),),
+                                                            ),
+
+
+                                                          ],
+                                                        ),
                                                       ),
 
-
-                                                    ],
-                                                  ),
-                                                ),
-
-                                              ],),
-                                            Container(
-                                              width: width,
-                                              child: Wrap(
-                                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                // mainAxisSize: MainAxisSize.max,
-                                                children: [
-
+                                                    ],),
                                                   Container(
-
-                                                    child: Column(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-
+                                                    width: width,
+                                                    child: Wrap(
+                                                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      // mainAxisSize: MainAxisSize.max,
                                                       children: [
 
                                                         Container(
-                                                          padding: EdgeInsets.all(2.8),
-                                                          child: Wrap(
 
-
-                                                            children: [
-                                                              Image.asset('assets/images/location.png',
-                                                                height: 20,
-                                                                width: 20,),
-                                                              SizedBox(width: 5,),
-                                                              Text(
-                                                                '${snapshot.data!
-                                                                    .data[index].address}',
-                                                                style: TextStyle(fontSize: 11),),
-                                                            ],
-                                                          ),
-                                                        ),
-
-                                                        Container(
-                                                          padding: EdgeInsets.all(2.8),
-                                                          child: Wrap(
+                                                          child: Column(
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
 
                                                             children: [
-                                                              Image.asset('assets/images/shift_date.png',
-                                                                height: 18,
-                                                                width: 20,),
-                                                              SizedBox(width: 5,),
-                                                              Text('Shift Date :',
-                                                                style: TextStyle(fontSize: 11),),
-                                                              Text(
-                                                                '${snapshot.data!
-                                                                    .data[index].shift_date}',
-                                                                style: TextStyle(fontSize: 11),),
-                                                            ],
-                                                          ),
-                                                        ),
 
-                                                        Container(
-                                                          padding: EdgeInsets.fromLTRB(2.8,2.8,2.8,10),
-                                                          child: Wrap(
-                                                            children: [
-                                                              Image.asset('assets/images/shift_time.png',
-                                                                height: 18,
-                                                                width: 20,),
-                                                              SizedBox(width: 5,),
-                                                              Text('Shift Time :',
-                                                                style: TextStyle(fontSize: 11),),
-                                                              Text(
-                                                                '${snapshot.data!
-                                                                    .data[index].shift_start_time} AM To ${snapshot.data!
-                                                                    .data[index].shift_end_time} PM',
-                                                                style: TextStyle(fontSize: 12),),
+                                                              Row(
+                                                                //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                                                                  children:[
+                                                                    Container(
+                                                                      //padding: EdgeInsets.all(2.8),
+                                                                      child: Image.asset('assets/images/location.png',
+                                                                        height: 20,
+                                                                        width: 20,),
+                                                                    ),
+
+                                                                    SizedBox(width: 5,),
+                                                                    Container(
+                                                                      // margin: EdgeInsets.only(top: size.height*0.02),
+                                                                      width: width*0.7,
+                                                                      child:
+                                                                      Text(
+                                                                        '${snapshot.data!
+                                                                            .data[index].address}',
+                                                                        style: TextStyle(fontSize: 11),),
+                                                                    ),
+                                                                  ]
+                                                              ),
+
+
+                                                              Container(
+                                                                padding: EdgeInsets.all(2.8),
+                                                                child: Wrap(
+
+                                                                  children: [
+                                                                    Image.asset('assets/images/shift_date.png',
+                                                                      height: 18,
+                                                                      width: 20,),
+                                                                    SizedBox(width: 5,),
+                                                                    Text('Shift Date :',
+                                                                      style: TextStyle(fontSize: 11),),
+                                                                    Text(
+                                                                      '${snapshot.data!
+                                                                          .data[index].shift_date}',
+                                                                      style: TextStyle(fontSize: 11),),
+                                                                  ],
+                                                                ),
+                                                              ),
+
+                                                              Container(
+                                                                padding: EdgeInsets.fromLTRB(2.8,2.8,2.8,10),
+                                                                child: Wrap(
+                                                                  children: [
+                                                                    Image.asset('assets/images/shift_time.png',
+                                                                      height: 18,
+                                                                      width: 20,),
+                                                                    SizedBox(width: 5,),
+                                                                    Text('Shift Time :',
+                                                                      style: TextStyle(fontSize: 11),),
+                                                                    Text(
+                                                                      '${snapshot.data!
+                                                                          .data[index].shift_start_time}  To ${snapshot.data!
+                                                                          .data[index].shift_end_time} ',
+                                                                      style: TextStyle(fontSize: 12),),
+                                                                  ],
+                                                                ),
+                                                              ),
+
                                                             ],
                                                           ),
                                                         ),
@@ -886,70 +928,79 @@ class _WorkShiftscreenState extends State<WorkShiftscreen> {
                                                       ],
                                                     ),
                                                   ),
-
-                                                ],
-                                              ),
-                                            ),
-                                            Divider(
-                                              height: 5,
-                                              thickness: 1,
-                                              color: Colors.grey,
-                                            ),
-                                            FittedBox(
-                                              child:
-                                              Wrap(
-                                                crossAxisAlignment: WrapCrossAlignment.start,
-
-                                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                                                children: [
-                                                  Container(
-                                                    width: width*0.72,
+                                                  Divider(
+                                                    height: 5,
+                                                    thickness: 1,
+                                                    color: Colors.grey,
+                                                  ),
+                                                  FittedBox(
                                                     child:
                                                     Wrap(
+                                                      crossAxisAlignment: WrapCrossAlignment.start,
+
+                                                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                                                       children: [
                                                         Container(
-                                                          padding: EdgeInsets.fromLTRB(2.8,2.8,2.8,10),
-                                                          child: Text('Client Name :',
-                                                            style: TextStyle(color: Colors.black,
-                                                                fontSize: 13, fontWeight: FontWeight.w600),),
+                                                          width: width*0.72,
+                                                          child:
+                                                          Wrap(
+                                                            children: [
+                                                              Container(
+                                                                padding: EdgeInsets.fromLTRB(2.8,2.8,2.8,10),
+                                                                child: Text('Client Name :',
+                                                                  style: TextStyle(color: Colors.black,
+                                                                      fontSize: 13, fontWeight: FontWeight.w600),),
+                                                              ),
+
+                                                              Container(
+                                                                padding: EdgeInsets.fromLTRB(2.8,2.8,2.8,10),
+                                                                child:  Text('${snapshot.data!
+                                                                    .data[index].client_name} ',
+                                                                  style: TextStyle(
+                                                                      color: Colors.black, fontSize: 13),),
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
 
                                                         Container(
                                                           padding: EdgeInsets.fromLTRB(2.8,2.8,2.8,10),
-                                                          child:  Text('${snapshot.data!
-                                                              .data[index].client_name} ',
-                                                            style: TextStyle(
-                                                                color: Colors.black, fontSize: 13),),
+                                                          child: Text(job_status1[index],
+                                                            style: TextStyle(color: Colors.red,
+                                                                fontSize: 13,
+                                                                fontWeight: FontWeight.w600),),
                                                         ),
                                                       ],
                                                     ),
                                                   ),
-
-                                                  Container(
-                                                    padding: EdgeInsets.fromLTRB(2.8,2.8,2.8,10),
-                                                    child: Text('Complete ',
-                                                      style: TextStyle(color: Colors.red,
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.w600),),
-                                                  ),
                                                 ],
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                  ));
-                                },),
-                              );
+                                            )
+                                        ));
+                                      },),
+                                    ),
+                                  );
 
-                          }
-                          else{return SizedBox();}
-                        })
+                              }
+                              else{
+                                if(snapshot.hasError)
+                                {
+                                  return Center (
+                                      child:SizedBox(
+                                        child: Text("No Record Found!!!",style: TextStyle(color: Colors.red),) ,));}
+                                else{
+
+                                  return Center (child:SizedBox( child: Text("loading"),));
+                                }
+                              }
+                            })
+                    )
                 )
+              ],
             )
-          ],
-        )
+        ),
+      ),
     );
   }
   Widget completeScreen()
@@ -1285,8 +1336,41 @@ class _WorkShiftscreenState extends State<WorkShiftscreen> {
         shift_date=jasonDataOffer["data"]["shift_date"];
         shift_start_time=jasonDataOffer["data"]["shift_start_time"];
         shift_end_time=jasonDataOffer["data"]["shift_end_time"];
-        address=jasonDataOffer["data"]["address"];
-*/
+
+         */
+        var jasonDataOffer = jsonDecode(respone.body);
+        for(int i=0;i<jasonDataOffer["data"].length;i++) {
+          job_status1.insert(i, jasonDataOffer["data"][i]["job_status"]);
+          //job_status[i] = jasonDataOffer["data"][i]["job_status"];
+
+          if (job_status1[i] == "0") {
+            job_status1.insert(i, "pending");
+            // job_status[i] = "pending";
+          }
+          if (job_status1[i] == "1") {
+            job_status1.insert(i, "process");
+            //  job_status[i] = "process";
+          }
+          if (job_status1[i] == "2") {
+            job_status1.insert(i, "complete");
+
+            // job_status[i] = "complete";
+          }
+          if (job_status1[i] == "3") {
+            job_status1.insert(i, "Review Updated");
+            // job_status[i] = "Review Updated";
+          }
+
+          if (job_status1[i] == "4") {
+            job_status1.insert(i, "Closed");
+            //job_status[i] = "Closed";
+          }
+        }
+
+
+
+
+
 
         return siftModel.fromJson(jasonDataOffer);
 
@@ -1319,6 +1403,12 @@ class _WorkShiftscreenState extends State<WorkShiftscreen> {
     }
 
 
+  }
+  Future <void> refresh()
+  async {
+    setState(() {
+
+    });
   }
 
   Future <siftModel> jobsiftcomplate() async {

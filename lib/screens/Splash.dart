@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:helath_care/Component/BottomBar.dart';
+import 'package:helath_care/screens/Home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Login.dart';
 import 'bottomBar.dart';
@@ -19,7 +22,7 @@ class _SplashscreenState extends State<Splashscreen> {
 
   void initState() {
     super.initState();
-    getPrefance();
+     getData();
   }
 
 
@@ -47,19 +50,63 @@ class _SplashscreenState extends State<Splashscreen> {
         ));
   }
 
-
-  getPrefance() async {
+  Future<void> getData() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      //int bottom=9;
-      Timer(
-        Duration(seconds: 5),
-            () => Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => LoginScreen(),
-          ),
-        ),
+      //SharedPreferences preferences = await SharedPreferences.getInstance();
+      String? userid = preferences.getString("userid");
+      String id= userid.toString();
+
+      Future.delayed(
+        Duration(seconds: 4),
+            () {
+          if (id==null) {
+            print(id);
+             Navigator.push(
+               context,
+               MaterialPageRoute(builder: (context) => BottomBar(bottom: 0)),
+             );
+
+            }
+           else {
+             // Navigator.push(context, MaterialPageRoute(builder: (context) => bottomBar(bottom: 2,jobid: id,)),);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+            );
+
+
+          }
+        },
       );
     });
   }
+ /* getPrefance() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? userid = preferences.getString("userid");
+    String id= userid.toString();
+
+    setState(() {
+      //int bottom=9;
+
+      Timer(
+        Duration(seconds: 5),
+            () =>
+
+
+
+      Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+      builder: (context) => Homescreen(),
+      ),
+      )
+      ,
+
+      );
+
+    });
+  }
+
+  */
 }

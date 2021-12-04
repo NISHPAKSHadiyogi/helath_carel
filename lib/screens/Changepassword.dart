@@ -27,7 +27,9 @@ class _changepasswordScreenState extends State<changepasswordScreen> {
   static TextEditingController cnfpassController = TextEditingController();
 
   bool hidepassword = true;
-
+  bool _isObscure = true;
+  bool _isObscure1 = true;
+  bool _isObscure2 = true;
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   FocusNode focusNode = new FocusNode();
@@ -153,7 +155,9 @@ class _changepasswordScreenState extends State<changepasswordScreen> {
                               padding: EdgeInsets.only(left: 10),
                               child: TextFormField(
                                 controller: oldpassController,
+                                obscureText: _isObscure,
                                 decoration: InputDecoration(
+                                  hintText: "Current Password",
                                   //labelText: firstName,
                                   focusedBorder: InputBorder.none,
                                   enabledBorder: InputBorder.none,
@@ -167,10 +171,20 @@ class _changepasswordScreenState extends State<changepasswordScreen> {
                                 ),
                               ),
                             ),
-                            Image.asset(
-                              'assets/images/eye.png',
-                              height: 20,
-                              width: 25,
+                            GestureDetector(
+                              onTap:  (){
+
+                                var a   = oldpassController.text;
+                                setState(() {
+                                  _isObscure = !_isObscure;
+                                });
+
+                              },
+                              child: Image.asset(
+                                'assets/images/eye.png',
+                                height: 20,
+                                width: 25,
+                              ),
                             ),
                           ],
                         ),
@@ -213,8 +227,10 @@ class _changepasswordScreenState extends State<changepasswordScreen> {
                               padding: EdgeInsets.only(left: 10),
                               child: TextFormField(
                                 controller: newpassController,
+                                obscureText: _isObscure1,
                                 decoration: InputDecoration(
                                   //labelText: firstName,
+                                  hintText: "New Password",
                                   focusedBorder: InputBorder.none,
                                   enabledBorder: InputBorder.none,
                                   disabledBorder: InputBorder.none,
@@ -227,10 +243,20 @@ class _changepasswordScreenState extends State<changepasswordScreen> {
                                 ),
                               ),
                             ),
-                            Image.asset(
-                              'assets/images/eye.png',
-                              height: 20,
-                              width: 25,
+                            GestureDetector(
+                              onTap:  (){
+
+                                var a   = newpassController.text;
+                                setState(() {
+                                  _isObscure1 = !_isObscure1;
+                                });
+
+                              },
+                              child: Image.asset(
+                                'assets/images/eye.png',
+                                height: 20,
+                                width: 25,
+                              ),
                             ),
                           ],
                         ),
@@ -273,8 +299,10 @@ class _changepasswordScreenState extends State<changepasswordScreen> {
                               padding: EdgeInsets.only(left: 10),
                               child: TextFormField(
                                 controller: cnfpassController,
+                                obscureText: _isObscure2,
                                 decoration: InputDecoration(
                                   //labelText: firstName,
+                                  hintText: "Confirm Password",
                                   focusedBorder: InputBorder.none,
                                   enabledBorder: InputBorder.none,
                                   disabledBorder: InputBorder.none,
@@ -287,10 +315,21 @@ class _changepasswordScreenState extends State<changepasswordScreen> {
                                 ),
                               ),
                             ),
-                            Image.asset(
-                              'assets/images/eye.png',
-                              height: 20,
-                              width: 25,
+
+                            GestureDetector(
+                              onTap:  (){
+
+                                var a   = cnfpassController.text;
+                                setState(() {
+                                  _isObscure2 = !_isObscure2;
+                                });
+
+                              },
+                              child: Image.asset(
+                                'assets/images/eye.png',
+                                height: 20,
+                                width: 25,
+                              ),
                             ),
                           ],
                         ),
@@ -375,7 +414,7 @@ class _changepasswordScreenState extends State<changepasswordScreen> {
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     print(basicAuth);
     int i=1;
-    if(oldpassController.text.isNotEmpty){
+    if(i==1){
       respone = await http.post(Uri.parse ('https://technolite.in/staging/777healthcare/api/change_password')
         ,
         headers: <String, String>{'authorization': basicAuth},
@@ -396,15 +435,18 @@ class _changepasswordScreenState extends State<changepasswordScreen> {
       if(respone.statusCode == 200){
         print('Response status: ${userid} ${oldpassController.text}  ${newpassController.text}  ${cnfpassController.text}');
         Navigator.push(context, MaterialPageRoute(builder: (context) => Homescreen()));
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Password Changed  Successfully.!!')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.green,content: Text('${res["message"]}')));
 
       }else{
         print('Response status: ${respone.statusCode}');
         print('Response status: ${userid} ${oldpassController.text}  ${newpassController.text}  ${cnfpassController.text}');
 
         res= jsonDecode(respone.body);
+        var data=res["data"].split("\n");
+        var data1=data[0].split("<p>");
+        var data2=data1[1].split("</p>");
         print('Response status: ${res["message"]}');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${res["message"]}')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.red,content: Text(data2[0])));
       }
 
     }

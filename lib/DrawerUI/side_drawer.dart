@@ -97,17 +97,56 @@ class _SideDrawerState extends State<SideDrawer> {
                   ],
                   borderRadius: BorderRadius.circular(80.0),
                 ),
-                child:FittedBox(
+                child:
+                image==null || image==""? CircleAvatar(
+                    backgroundColor: Colors.grey,
+                    radius: 100,
+
+
+                    backgroundImage:AssetImage("assets/images/user.png")
+
+
+
+
+                  // child:  image==null || image==""?Image.asset("assets/images/user.png",fit: BoxFit.cover):Image.network(image,fit: BoxFit.cover)
+
+
+
+
+                ):
+
+                CircleAvatar(
+                    backgroundColor: Colors.grey,
+                    radius: 100,
+
+
+                    backgroundImage:NetworkImage(image ,)
+
+
+
+
+                  //child:  Image.asset("assets/images/user.png",fit: BoxFit.cover):Image.network(image,fit: BoxFit.cover)
+
+
+
+
+                ),
+
+
+                /*child:FittedBox(
                     fit: BoxFit.fill,
                     child:CircleAvatar(
                         radius: 80,
 
                         child: ClipOval(
-                            child: Image.network(image) )
+                            child:       image==null || image==""?Image.asset("assets/images/user.png"):Image.network(image)
+                        )
                     )
 
 
           ),
+
+                 */
 
 
               ),
@@ -537,7 +576,7 @@ class _SideDrawerState extends State<SideDrawer> {
                                 onPressed: () async {
                                  SharedPreferences sp = await SharedPreferences.getInstance();
                                  sp.clear();
-                                 Navigator.push(
+                                 Navigator.pushReplacement(
                                    context,
                                    MaterialPageRoute(builder: (context) => LoginScreen()),
                                  );

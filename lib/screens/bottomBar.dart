@@ -3,6 +3,7 @@ import 'package:helath_care/Constant/Colors.dart';
 import 'package:helath_care/screens/Myavailability.dart';
 import 'package:helath_care/screens/Notification.dart';
 import 'package:helath_care/screens/Updateprofile.dart';
+import 'package:helath_care/screens/shiftdetailaccept.dart';
 
 import 'Faq.dart';
 import 'Findshift.dart';
@@ -14,8 +15,10 @@ import 'Shiftdetailcomplete.dart';
 import 'Shiftdetails.dart';
 import 'Timesheet.dart';
 import 'Worksheet.dart';
+import 'Worksheet.dart';
 import 'Worksheetsubmit.dart';
 import 'Workspross.dart';
+import 'closedshift.dart';
 
 
 // Stateful widget created
@@ -50,6 +53,8 @@ class _HomePageState extends State<bottomBar> {
     faqscreen(),
     faqscreen(),
     WorkShiftscreen(),
+    faqscreen(),
+    faqscreen(),
   ];
 
   setBottomBarIndex(index) {
@@ -79,9 +84,13 @@ class _HomePageState extends State<bottomBar> {
     pages[10]=timesheetScreen(jobid: jobid1,);
     pages[11]=WorksheetScreen(jobid: jobid1,);
     pages[12]=Woksheetsubmitscreen(jobid: jobid1,);
+    pages[14]=Shiftdetailacceptscreen(jobid: jobid1,);
+    pages[15]=Shiftdetailclosed(jobid: jobid1,);
+
 
 
     return Scaffold (
+      resizeToAvoidBottomInset: false,
       body: pages[_selectedItemIndex],
 
       // floating action button in center

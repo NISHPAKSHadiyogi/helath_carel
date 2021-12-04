@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:helath_care/screens/Splash.dart';
 import 'package:provider/provider.dart';
@@ -7,9 +9,9 @@ import 'package:provider/provider.dart';
 import 'LocationServices/locationmodel.dart';
 import 'LocationServices/services.dart';
 
-void main(){
+Future<void> main() async {
   runApp(MyApp());
-
+  await Firebase.initializeApp();
 }
 
 class MyApp extends StatelessWidget {
@@ -28,6 +30,7 @@ class MyApp extends StatelessWidget {
             //scaffoldBackgroundColor: Utils.scaffold_bg_color,
           ),
           home: Splashscreen(),
+          builder: EasyLoading.init(),
         )
     );
   }

@@ -26,9 +26,9 @@ class faqscreen extends StatefulWidget {
 class  _faqscreenState extends State<faqscreen> {
   @override
   Widget build(BuildContext context) {
-    /* double width = MediaQuery.of(context).size.width;
+     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    Size size = MediaQuery.of(context).size;*/
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
 
@@ -37,13 +37,17 @@ class  _faqscreenState extends State<faqscreen> {
           centerTitle: true,
 
         ),
-        body: SingleChildScrollView(
+        body: RefreshIndicator(
+          onRefresh: refresh,
           child: Container(
-            height: 650,
-            child: Column(
-              children:[
+            padding: EdgeInsets.only(top: 20),
+            child: SingleChildScrollView(
+              child: Container(
+                height: height*0.80,
+                child: Column(
+                  children:[
     Container(
-    height: 650,
+
     child: Container(
     child: FutureBuilder<TypeModel>(
     future: Faq(),
@@ -51,73 +55,94 @@ class  _faqscreenState extends State<faqscreen> {
 
       if (snapshot.hasData) {
       print("objectPrint" +
-          snapshot.data!.data
-              .toString());
+              snapshot.data!.data
+                  .toString());
       return
-        Expanded(
-          child: ListView.builder(
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: refresh,
+                child: ListView.builder(
 
-            itemCount: snapshot
-                .data!.data.length,
-            itemBuilder: (context, index) {
-              return Card(
-                elevation: 8.0,
-                margin: EdgeInsets.all(8.0),
+                  itemCount: snapshot
+                      .data!.data.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      elevation: 8.0,
+                      margin: EdgeInsets.all(8.0),
 
-                child: Container(
-                  //padding: EdgeInsets.only(left: 5),
-                  color: Colors.white,
-                  child: Column(
-                    children: [
+                      child: Container(
+                        //padding: EdgeInsets.only(left: 5),
+                        color: Colors.white,
+                        child: Column(
+                          children: [
 
-                      ExpansionTile(
+                            ExpansionTile(
 
 
-                        title: Container(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            '${snapshot.data!
-                              .data[index].question}',
-                            style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold,
-                              fontSize: 15,
+                              title: Container(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  '${snapshot.data!
+                                    .data[index].question}',
+                                  style: TextStyle(
+                                    color: Colors.black, fontWeight: FontWeight.bold,
+                                    fontSize: 15,
 
+                                  ),
+
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.only(
+                                      left: 20.0, right: 20, bottom: 10),
+                                  child:  Html(
+                                      data:snapshot.data!
+                                          .data[index].answer),
+                                 ),
+
+                              ],
                             ),
-
-                            textAlign: TextAlign.start,
-                          ),
+                          ],
                         ),
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.only(
-                                left: 20.0, right: 20, bottom: 10),
-                            child:  Html(
-                                data:snapshot.data!
-                                    .data[index].answer),
-                           ),
-
-                        ],
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-        );
+              ),
+            );
     }
-    else{ return SizedBox();}
+      else{
+            if(snapshot.hasError)
+            {
+              return Center(child: SizedBox(
+                 child: Text("NO Data Found" ,style: TextStyle(color: Colors.red),),),) ;}
+            else{
+
+              return Center(child: SizedBox(
+                 child: Text("Loading..."),),) ;
+            }
+      }
     }),
     )
     )
 
 
-              ],
+                  ],
+                ),
+              ),
+
             ),
           ),
-
         )
     );
+  }
+  Future <void> refresh()
+  async {
+    setState(() {
+
+    });
   }
   Future <TypeModel> Faq() async {
     String username = 'adiyogi';

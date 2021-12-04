@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:helath_care/Component/Utils.dart';
 import 'package:helath_care/Constant/Colors.dart';
 import 'package:helath_care/DrawerUI/side_drawer.dart';
@@ -31,7 +32,7 @@ class _HomescreenState extends State<Homescreen> {
   String image="";
   String email="";
   String mobile_no="";
-
+  String id="";
   List leave_list = [];
 
 
@@ -51,6 +52,10 @@ class _HomescreenState extends State<Homescreen> {
     // TODO: implement dispose
     super.dispose();
   }
+  Future<bool> onWillPop() async {
+
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,355 +68,403 @@ class _HomescreenState extends State<Homescreen> {
 
    // Size size = MediaQuery.of(context).size;
     UserDetail();
-    return Scaffold(
-      key: scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: kPrimaryColor,
-        elevation: 0,
-        toolbarHeight: 80,
-        centerTitle: true,
-        leading:IconButton(
-          onPressed: () {
-            scaffoldKey.currentState?.openDrawer();
-          },
-          icon: Image.asset(
-            'assets/images/menu.png',
-            height: 35,
-            width: 35,
-          ),
-        ),
-        title: Container(
-          child:Image.asset(
-            'assets/images/logo_h.png',
-            height: 50,
-          ) ,
-        ),
-        actions:<Widget> [
-          GestureDetector(
-            onTap: (){
-              setState(() {
+    return WillPopScope(
+      onWillPop: onWillPop,
+      child: Scaffold(
 
-              });
-
+        key: scaffoldKey,
+        appBar: AppBar(
+          backgroundColor: kPrimaryColor,
+          elevation: 0,
+          toolbarHeight: 80,
+          centerTitle: true,
+          leading:IconButton(
+            onPressed: () {
+              scaffoldKey.currentState?.openDrawer();
             },
-            child: Container(
-              margin: EdgeInsets.all(5),
-              alignment: Alignment.center,
+            icon: Image.asset(
+              'assets/images/menu.png',
+              height: 35,
+              width: 35,
+            ),
+          ),
+          title: Container(
+            child:Image.asset(
+              'assets/images/logo_h.png',
+              height: 50,
+            ) ,
+          ),
+          actions:<Widget> [
+            GestureDetector(
+              onTap: (){
+                setState(() {
 
-              child: Image.asset(
-                'assets/images/notify.png',
-                height: 35,
+                });
+
+              },
+              child: Container(
+                margin: EdgeInsets.all(5),
+                alignment: Alignment.center,
+
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>bottomBar(bottom: 3, jobid: id)));
+
+                  },
+                  child: Image.asset(
+                    'assets/images/notify.png',
+                    height: 35,
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      drawer: SideDrawer(),
-      body: SingleChildScrollView(child: Stack(
+          ],
+        ),
+        drawer: SideDrawer(),
+        body: SingleChildScrollView(child: Stack(
 
-        children: [
+          children: [
 
-          Container(
-            margin: EdgeInsets.only(top: 110, left: 7, right: 7),
-            width: Size.infinite.width,
+            Container(
+              margin: EdgeInsets.only(top: 110, left: 7, right: 7),
+              width: Size.infinite.width,
 
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.shade200,
-                  offset: Offset(0.0, 1.0), //(x,y)
-                  blurRadius: 6.0,
-                ),
-
-
-              ],
-
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-
-                  onTap: (){
-                  //  print("ghdg");
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => bottomBar( bottom: 0,jobid: "")));
-                   // Shiftscreen();
-                    },
-                    child:
-                Container(
-                  //color: Color(0xfff54337),
-
-                  height: size.height * 0.18,
-                  width: size.width * 0.93,
-                    decoration: BoxDecoration(
-                     // color: Colors.red,
-                    image: DecorationImage(
-                    image: AssetImage(
-                    'assets/images/red.png'),
-
-
-                      ),
-
-                    ),
-
-                  child: Container(
-
-                    margin: EdgeInsets.only(left: width/4),
-
-                    child:
-
-    Center(
-                      child: Text(
-                        "My shift",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade200,
+                    offset: Offset(0.0, 1.0), //(x,y)
+                    blurRadius: 6.0,
                   ),
 
-                ),
-    ),
+
+                ],
+
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
                   GestureDetector(
 
-                  onTap: (){
-                  //  print("ghdg");
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => bottomBar( bottom: 5,jobid: "",)));
-                  // Shiftscreen();
-                  },
-                  child:
-                Container(
-                  //color: Color(0xfff54337),
+                    onTap: (){
+                    //  print("ghdg");
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => bottomBar( bottom: 0,jobid: "")));
+                     // Shiftscreen();
+                      },
+                      child:
+                  Container(
+                    //color: Color(0xfff54337),
 
-                  height: size.height * 0.18,
-                  width: size.width * 0.93,
-                  decoration: BoxDecoration(
-                    // color: Colors.red,
-                    image: DecorationImage(
+                    height: size.height * 0.18,
+                    width: size.width * 0.93,
+                      decoration: BoxDecoration(
+                       // color: Colors.red,
+                      image: DecorationImage(
                       image: AssetImage(
-                          'assets/images/blue.png'),
+                      'assets/images/red.png'),
 
 
+                        ),
+
+                      ),
+
+                    child: Container(
+
+                      margin: EdgeInsets.only(left: width/4),
+
+                      child:
+
+      Center(
+                        child: Text(
+                          "My shift",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
                     ),
 
                   ),
+      ),
+                    GestureDetector(
 
-                  child: Container(
-                    margin: EdgeInsets.only(left: width/4),
+                    onTap: (){
+                    //  print("ghdg");
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => bottomBar( bottom: 5,jobid: "",)));
+                    // Shiftscreen();
+                    },
+                    child:
+                  Container(
+                    //color: Color(0xfff54337),
 
-                    child: Center(
-                      child: Text(
-                        "Find shift",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
+                    height: size.height * 0.18,
+                    width: size.width * 0.93,
+                    decoration: BoxDecoration(
+                      // color: Colors.red,
+                      image: DecorationImage(
+                        image: AssetImage(
+                            'assets/images/blue.png'),
+
+
+                      ),
+
+                    ),
+
+                    child: Container(
+                      margin: EdgeInsets.only(left: width/4),
+
+                      child: Center(
+                        child: Text(
+                          "Find shift",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),),
+      GestureDetector(
+
+      onTap: (){
+      //  print("ghdg");
+      Navigator.push(context, MaterialPageRoute(builder: (context) => bottomBar( bottom: 13,jobid: "",)));
+      // Shiftscreen();
+      },
+      child:
+                  Container(
+                    //color: Color(0xfff54337),
+
+                    height: size.height * 0.18,
+                    width: size.width * 0.93,
+                    decoration: BoxDecoration(
+                      // color: Colors.red,
+                      image: DecorationImage(
+                        image: AssetImage(
+                            'assets/images/green.png'),
+
+
+                      ),
+
+                    ),
+
+                    child: Container(
+                      margin: EdgeInsets.only(left: width/4),
+
+                      child: Center(
+                        child: Text(
+                          "My Worksheet",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),),
-    GestureDetector(
+      ),
 
-    onTap: (){
-    //  print("ghdg");
-    Navigator.push(context, MaterialPageRoute(builder: (context) => bottomBar( bottom: 13,jobid: "",)));
-    // Shiftscreen();
-    },
-    child:
-                Container(
-                  //color: Color(0xfff54337),
-
-                  height: size.height * 0.18,
-                  width: size.width * 0.93,
-                  decoration: BoxDecoration(
-                    // color: Colors.red,
-                    image: DecorationImage(
-                      image: AssetImage(
-                          'assets/images/green.png'),
-
-
-                    ),
-
-                  ),
-
-                  child: Container(
-                    margin: EdgeInsets.only(left: width/4),
-
-                    child: Center(
-                      child: Text(
-                        "My Worksheet",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-    ),
-
-              ],
+                ],
+              ),
             ),
-          ),
 
-          Positioned(
-            child: Container(
-              width: Size.infinite.width,
-              height: size.height * 0.05,
-              
-              decoration: BoxDecoration(
-                color:kPrimaryColor,
-                border: Border(
-                  bottom: BorderSide(color: Colors.grey, width: 2),
+            Positioned(
+              child: Container(
+                width: Size.infinite.width,
+                height: size.height * 0.05,
+
+                decoration: BoxDecoration(
+                  color:kPrimaryColor,
+                  border: Border(
+                    bottom: BorderSide(color: Colors.grey, width: 2),
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-    child:
+            Positioned(
+      child:
    Container(
-    child: FutureBuilder<userModel>(
-    future: UserDetail(),
-    builder: (BuildContext context,
-    AsyncSnapshot<userModel> snapshot) {
-      int i=0;
-    if (i==0) {
+      child: FutureBuilder<userModel>(
+      future: UserDetail(),
+      builder: (BuildContext context,
+      AsyncSnapshot<userModel> snapshot) {
+        int i=0;
+      if (i==0) {
 
-    return
-    Card(
-    elevation: 5,
-    margin: EdgeInsets.symmetric(horizontal: 10),
-    
-    child: Container(
-    width: Size.infinite.width,
-    padding: EdgeInsets.all(5),
-    //height: size.height * 0.15,
+      return
+      Card(
+      elevation: 5,
+      margin: EdgeInsets.symmetric(horizontal: 10),
 
-    decoration: BoxDecoration(
-    color: Colors.white,
-    border: Border(
-    top: BorderSide(color: ksecondaryColor,width: 2),
-    ),
-    ),
-    child: Wrap(
+      child: Container(
+      width: Size.infinite.width,
+      padding: EdgeInsets.all(5),
+      //height: size.height * 0.15,
+
+      decoration: BoxDecoration(
+      color: Colors.white,
+      border: Border(
+      top: BorderSide(color: ksecondaryColor,width: 2),
+      ),
+      ),
+      child: Wrap(
    spacing: 15,
-    children: [
+      children: [
+      Container(
+      margin: EdgeInsets.only(left: 10),
+      height: size.height * 0.12,
+      width: size.width * 0.24,
+
+      decoration: BoxDecoration(
+      color: ksecondaryColor,
+
+      borderRadius: BorderRadius.circular(100.0),
+      ),
+        child:
+        image==null || image==""? CircleAvatar(
+              backgroundColor: Colors.grey,
+                radius: 100,
+
+
+                backgroundImage:AssetImage("assets/images/user.png")
+
+
+
+
+                   // child:  image==null || image==""?Image.asset("assets/images/user.png",fit: BoxFit.cover):Image.network(image,fit: BoxFit.cover)
+
+
+
+
+        ):
+
+        CircleAvatar(
+            backgroundColor: Colors.grey,
+            radius: 100,
+
+
+             backgroundImage:NetworkImage(image ,)
+
+
+
+
+            //child:  Image.asset("assets/images/user.png",fit: BoxFit.cover):Image.network(image,fit: BoxFit.cover)
+
+
+
+
+        ),
+
+
+        /*ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: image == null
+                              ? Image.asset(
+                            "assets/images/date.png",
+                            fit: BoxFit.contain,
+                          )
+                              : Image.network(
+                            image,
+                            fit: BoxFit.cover,
+                          ),
+                        ),*/
+      ),
+      Container(
+      //margin: EdgeInsets.only(left: 20, top: 20),
+      width: size.width * 0.60,
+
+      child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+      Container(
+      //height: 30,
+      width: Size.infinite.width,
+      //color: ksecondaryColor,
+      child: Text(
+      '${username1}',
+      style: TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w800,
+      color: Utils.app_black_color,
+      ),
+      ),
+      ),
+      Text(
+      '${unique_id}',
+      style: TextStyle(
+      fontSize: 15,
+      fontWeight: FontWeight.w600,
+      color:Colors.grey,
+      ),
+      ),
+      Row(
+      children: [
+      Container(
+        child: Image.asset(
+        "assets/images/mail.png",
+        height: 22,
+        width: 22,
+        ),
+      ),
+      SizedBox(width: 5,),
     Container(
-    margin: EdgeInsets.only(left: 10),
-    height: size.height * 0.12,
-    width: size.width * 0.24,
+      width: width*0.5,
+      child:  Text(
+      '${email}',
 
-    decoration: BoxDecoration(
-    color: ksecondaryColor,
-
-    borderRadius: BorderRadius.circular(100.0),
-    ),
-    child:
-    //Image.network("https://technolite.in/staging/777healthcare/uploads/profile/1uscent1027_sml10.jpg")
-    Image.network(image)
-    /*ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: image == null
-                            ? Image.asset(
-                          "assets/images/date.png",
-                          fit: BoxFit.contain,
-                        )
-                            : Image.network(
-                          image,
-                          fit: BoxFit.cover,
-                        ),
-                      ),*/
-    ),
-    Container(
-    //margin: EdgeInsets.only(left: 20, top: 20),
-    width: size.width * 0.60,
-
-    child: Column(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    Container(
-    height: 30,
-    width: Size.infinite.width,
-    //color: ksecondaryColor,
-    child: Text(
-    '${username1}',
-    style: TextStyle(
-    fontSize: 20,
-    fontWeight: FontWeight.w800,
-    color: Utils.app_black_color,
-    ),
-    ),
-    ),
-    Text(
-    '${unique_id}',
-    style: TextStyle(
-    fontSize: 15,
-    fontWeight: FontWeight.w600,
-    color:Colors.grey,
-    ),
-    ),
-    Row(
-    children: [
-    Image.asset(
-    "assets/images/mail.png",
-    height: 22,
-    width: 22,
-    ),
-    SizedBox(width: 5,),
-    Text(
-    '${email}',
-
-    style: TextStyle(
-    fontSize: 14,
-    fontWeight: FontWeight.w600,
-    color:Colors.grey,
-    // color: Utils.Primary_color,
-    ),
-    )
-    ],
-    ),
-    Row(
-    children: [
-    Image.asset(
-    "assets/images/contact.png",
-    height: 22,
-    width: 22,
-    ),
-    SizedBox(width: 5,),
-    Text(
-    '${mobile_no}',
-    style: TextStyle(
-    fontSize: 12,
-    fontWeight: FontWeight.w600,
-    color:Colors.grey,
-    // color: Utils.Primary_color,
-    ),
-    )
-    ],
-    ),
-    ],
-    ),
-    ),
-    ],
-    ),
-    ),
-    );
-    }
-    else{return SizedBox();}
-    })
-          ),
-          )
-          ],
-     )
+      style: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      color:Colors.grey,
+      // color: Utils.Primary_color,
+      ),
       )
+      ,)
+      ],
+      ),
+      Row(
+      children: [
+      Image.asset(
+      "assets/images/contact.png",
+      height: 22,
+      width: 22,
+      ),
+      SizedBox(width: 5,),
+      Text(
+      '${mobile_no}',
+      style: TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w600,
+      color:Colors.grey,
+      // color: Utils.Primary_color,
+      ),
+      )
+      ],
+      ),
+      ],
+      ),
+      ),
+      ],
+      ),
+      ),
+      );
+      }
+      else{return SizedBox();}
+      })
+            ),
+            )
+            ],
+       )
+        )
+      ),
     );
   }
  Future<userModel> UserDetail() async {
@@ -419,7 +472,7 @@ class _HomescreenState extends State<Homescreen> {
     String password = 'adi12345';
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? userid = preferences.getString("userid");
-    String id= userid.toString();
+     id= userid.toString();
    //  String id= "22";
 
 

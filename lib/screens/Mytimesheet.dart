@@ -21,16 +21,24 @@ class mytimesheetScreen extends StatefulWidget {
 class _mytimesheetScreenState extends State<mytimesheetScreen> {
   DateTime selectedDate = DateTime.now();
   final DateTime initialDate  =DateTime.now();
-  late String year;
-  late String month;
-  late String hour1="";
-  late String min1="";
-  late String sec1="";
+  late String year="";
+  late String month="";
+  late String hour1="0";
+  late String min1="0";
+  late String sec1="0";
 
   @override
   void initState() {
     super.initState();
     selectedDate = initialDate;
+    year=selectedDate.year.toString();
+    if(selectedDate.month<10) {
+      month = "0"+selectedDate.month.toString();
+    }else{
+      month = selectedDate.month.toString();
+    }
+   // month=selectedDate.month.toString();
+    //Accept1();
 
   }
   Future<void> _selectDate(BuildContext context) async {
@@ -43,10 +51,18 @@ class _mytimesheetScreenState extends State<mytimesheetScreen> {
       locale: Locale("en"),
     ).then((date) {
       if (date != null) {
+
         setState(() {
+
           selectedDate = date;
           year=selectedDate.year.toString();
-          month=selectedDate.month.toString();
+          if(selectedDate.month<10) {
+            month = "0"+selectedDate.month.toString();
+          }else{
+            month = selectedDate.month.toString();
+          }
+
+
         });
       }
     });
@@ -86,7 +102,73 @@ class _mytimesheetScreenState extends State<mytimesheetScreen> {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        body: Container(
+        body:FutureBuilder<siftModel>(
+        future: Accept1(),
+    builder: (BuildContext context,
+    AsyncSnapshot<siftModel> snapshot) {
+    print("objectPrint" +
+    snapshot.error
+        .toString());
+    if (snapshot.hasData ) {
+    print("objectPrint---" +
+    snapshot.data!.data.length
+        .toString());
+    int h=0;
+    int min=0;
+    int sec=0;
+
+    for(int i=0;i<snapshot.data!.data.length;i++){
+    if(snapshot.data!.data[i].total_work_time!=null ||snapshot.data!.data[i].total_work_time==0) {
+   // List<String>hours = snapshot.data!.data[i].total_work_time.toString().split(":");
+       int minI = snapshot.data!.data[i].total_work_time;
+
+      print("objectPrint---" +
+        snapshot.data!.data[i].total_work_time.toString() + "####");
+
+     // print("objectPrint333" + snapshot.data!.data[i].total_work_time + "lllll" + snapshot.data!.data.length.toString() + "" + min );
+
+    //  h = int.parse(hours[0]) + h;
+     // min = int.parse(hours[1]) + min;
+     // sec = int.parse(hours[2]) + sec;
+    //  var minI=int.parse(mins);
+       var min2;
+       var h1=0;
+       if(minI>=60) {
+         min2= minI / 60;
+         h1=min2.toInt();
+      }
+      else{
+        min2=minI;
+
+      }
+     // var sec2=sec/60;
+
+      if(minI>=60) {
+        min2 = minI % 60;
+      }
+      else{
+        min2=minI;
+
+      }
+
+      min=min2+min;
+      h=h1+h;
+
+     // sec=sec%60;
+
+
+
+      //sec1=sec.toString();
+
+    }
+
+
+    }
+
+    hour1=h.toString();
+    min1=min.toString();
+
+    return Container(
           height: size.height*0.85,
           child:
             Padding(
@@ -107,7 +189,7 @@ class _mytimesheetScreenState extends State<mytimesheetScreen> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                '${selectedDate.month}/${selectedDate.year}',
+                                '${month}/${year}',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold),
@@ -213,43 +295,8 @@ class _mytimesheetScreenState extends State<mytimesheetScreen> {
                     ],
                   ),
         Container(
-        child: FutureBuilder<siftModel>(
-        future: Accept1(),
-    builder: (BuildContext context,
-    AsyncSnapshot<siftModel> snapshot) {
-      print("objectPrint" +
-          snapshot.error
-              .toString());
-      if (snapshot.hasData) {
-        print("objectPrint" +
-            snapshot.data!.data
-                .toString());
-      int h=0;
-       int min=0;
-    int sec=0;
+      child:
 
-        for(int i=0;i<snapshot.data!.data.length;i++){
-            List<String>hours= snapshot.data!.data[i].total_work_time.toString().split(":");
-
-            print("objectPrint" +
-                snapshot.data!.data[i].total_work_time+"lllll"+snapshot.data!.data.length.toString()+""+hours[0]+""+hours[1]);
-
-              h =int.parse(hours[0])+h;
-              min=int.parse(hours[1])+min;
-              sec =int.parse(hours[2])+sec;
-
-
-
-
-        }
-
-          hour1=h.toString();
-          min1=min.toString();
-          sec1=sec.toString();
-
-
-
-        return
           Expanded(
             child: ListView.builder(
                 itemCount: snapshot.data!.data.length, itemBuilder: (context, index) {
@@ -290,7 +337,7 @@ class _mytimesheetScreenState extends State<mytimesheetScreen> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                '${snapshot.data!.data[index].shift_start_time}',
+                                '${snapshot.data!.data[index].check_in}',
                                 style: TextStyle(
                                     fontSize: 15, color: Colors.green),
                               ),
@@ -306,7 +353,7 @@ class _mytimesheetScreenState extends State<mytimesheetScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              '${snapshot.data!.data[index].shift_end_time}',
+                              '${snapshot.data!.data[index].check_out}',
                               style: TextStyle(
                                   fontSize: 15, color: Colors.red),
                             ),
@@ -320,14 +367,9 @@ class _mytimesheetScreenState extends State<mytimesheetScreen> {
                 ),
               );
             }),
-          );
-
-    }
-      else{return SizedBox();}
-
-    })
 
         )
+    )
 
 
 
@@ -337,7 +379,25 @@ class _mytimesheetScreenState extends State<mytimesheetScreen> {
             ),
 
 
-        ),
+        );
+
+
+      }
+    else{
+      if(snapshot.hasError)
+      {
+        return Center(
+          child: SizedBox(width: size.width*0.5,
+            height: size.height*0.5, child: Text("NO Data Found" ,style: TextStyle(color: Colors.red),),),) ;}
+      else{
+
+        return Center(child: SizedBox(width: size.width*0.5,
+          height: size.height*0.5, child: Text("Loading..."),),) ;
+      }
+    }
+
+    })
+
     );
   }
   Future <siftModel> Accept1() async {
@@ -376,12 +436,15 @@ class _mytimesheetScreenState extends State<mytimesheetScreen> {
       if(respone.statusCode == 200){
         //print('Response status: ${userid} ${oldpassController.text}  ${newpassController.text}  ${cnfpassController.text}');
         //  Navigator.push(context, MaterialPageRoute(builder: (context) => Homescreen()));
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${jasonDataOffer["message"]}')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar( behavior: SnackBarBehavior.floating,content: Text('${jasonDataOffer["message"]}'),backgroundColor: Colors.green,));
+
+       // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${jasonDataOffer["message"]}')));
         return siftModel.fromJson(jasonDataOffer);
 
       }else{
         print('Response status: ${respone.statusCode}');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${jasonDataOffer["message"]}')));
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar( behavior: SnackBarBehavior.floating,content: Text('${jasonDataOffer["message"]}'),backgroundColor: Colors.red,));
 
         // print('Response status: ${userid} ${oldpassController.text}  ${newpassController.text}  ${cnfpassController.text}');
         return siftModel.fromJson(jasonDataOffer);

@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:helath_care/screens/bottomBar.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:helath_care/Constant/Colors.dart';
 
 import 'Home.dart';
+import 'Login.dart';
 
 
 class ForgetScreen extends StatefulWidget {
@@ -76,9 +78,14 @@ class _ForgetScreenState extends State<ForgetScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                child: Icon(Icons.arrow_back_ios_rounded,
-                                  color: Colors.white,),
+                              GestureDetector(
+                                onTap:(){
+                          Navigator.pop(context);
+                          },
+                                child: Container(
+                                  child: Icon(Icons.arrow_back_ios_rounded,
+                                    color: Colors.white,),
+                                ),
                               ),
 
                               Container(
@@ -146,6 +153,7 @@ class _ForgetScreenState extends State<ForgetScreen> {
                               child: TextFormField(
                                 controller: Emailcontroller,
                                 decoration: InputDecoration(
+                                  hintText: "Email",
                                   //labelText: firstName,
                                   focusedBorder: InputBorder.none,
                                   enabledBorder: InputBorder.none,
@@ -228,7 +236,8 @@ class _ForgetScreenState extends State<ForgetScreen> {
     String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     print(basicAuth);
-    if(Emailcontroller.text.isNotEmpty){
+    int i =0;
+    if(i==0){
      respone = await http.post(Uri.parse ('https://technolite.in/staging/777healthcare/api/reset_password_request')
     ,
     headers: <String, String>{'authorization': basicAuth},
@@ -246,7 +255,7 @@ class _ForgetScreenState extends State<ForgetScreen> {
 
     if(respone.statusCode == 200){
     print('Response status: ${respone.body}');
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Homescreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) =>LoginScreen()));
     var res= jsonDecode(respone.body);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(behavior: SnackBarBehavior.floating,content: Text('${res["message"]}')));
 

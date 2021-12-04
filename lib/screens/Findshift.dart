@@ -28,6 +28,7 @@ class _FindshiftScreenState extends State<FindshiftScreen> {
   String shift_start_time="";
   String shift_end_time="";
   String address="";
+  int countera=0;
 late List <Color> acolors=<Color>[];
   late String id;
 
@@ -44,30 +45,56 @@ late List <Color> acolors=<Color>[];
         centerTitle: true,
         automaticallyImplyLeading: true,
       ),
-      body: Column(
-        children: [
-       Container(
+      body: RefreshIndicator(
+        onRefresh: refresh,
+        child: Container(
+          padding: EdgeInsets.only(top: 20),
+
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+
+             Container(
+
+
+                   height: height*0.80,
     child: FutureBuilder<siftModel>(
     future: jobsiftopen(),
     builder: (BuildContext context,
     AsyncSnapshot<siftModel> snapshot) {
-      if (snapshot.hasData) {
-        print("objectPrint" +
-            snapshot.data!.data
-                .toString());
+            if (snapshot.hasData) {
+                print("objectPrint" +
+                    snapshot.data!.data
+                        .toString());
 
 
-        return
+                return
 
-          Expanded(
-            child: ListView.builder(
-              itemCount: snapshot.data!.data.length, itemBuilder: (context, index) {
-              return GestureDetector(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => bottomBar(bottom: 9, jobid: snapshot.data!.data[index].id)));
-                  },
-                  child:
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: refresh,
+                      child: ListView.builder(
+                        itemCount: snapshot.data!.data.length, itemBuilder: (context, index) {
+                        return GestureDetector(
+                            onTap: () {
+                              if(acolors[index]==kPrimaryColor) {
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) =>
+                                        bottomBar(bottom: 14,
+                                            jobid: snapshot.data!.data[index]
+                                                .id)));
+                              }
+                              else{
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) =>
+                                        bottomBar(bottom: 9,
+                                            jobid: snapshot.data!.data[index]
+                                                .id)));
+
+                              }
+
+                            },
+                            child:
     Card(
     elevation: 5,
     margin: EdgeInsets.all(10),
@@ -89,7 +116,7 @@ late List <Color> acolors=<Color>[];
     width: size.width * 0.7,
     child:  Text(
     '${snapshot.data!
-        .data[index].job_name}',
+                .data[index].job_name}',
     style: TextStyle(
     color: kPrimaryColor, fontSize: 16,fontWeight: FontWeight.bold),),
     ),
@@ -99,35 +126,35 @@ late List <Color> acolors=<Color>[];
     children: [
     /*  Container(
 
-                          padding:
-                          EdgeInsets.symmetric(
-                              horizontal: 7, vertical: 5),
-                          margin:
-                          EdgeInsets.only(left: 3, bottom: 5, right: 5),
-                          height: 30,
-                          decoration: ShapeDecoration(
-                            color: ksecondaryColor,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  width: 1.0,
-                                  style: BorderStyle.solid,
-                                  color: kPrimaryColor),
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(1)),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Image.asset('assets/images/map.png'),
-                              SizedBox(width: 3,),
-                              Text("Map",
-                                style: TextStyle(color: kPrimaryColor),),
+                                    padding:
+                                    EdgeInsets.symmetric(
+                                        horizontal: 7, vertical: 5),
+                                    margin:
+                                    EdgeInsets.only(left: 3, bottom: 5, right: 5),
+                                    height: 30,
+                                    decoration: ShapeDecoration(
+                                      color: ksecondaryColor,
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            width: 1.0,
+                                            style: BorderStyle.solid,
+                                            color: kPrimaryColor),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(1)),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Image.asset('assets/images/map.png'),
+                                        SizedBox(width: 3,),
+                                        Text("Map",
+                                          style: TextStyle(color: kPrimaryColor),),
 
-                            ],
-                          ),
-                        ),
+                                      ],
+                                    ),
+                                  ),
 
-                       */
+                                 */
     Container(
 
     padding: EdgeInsets.all(2.8),
@@ -161,25 +188,31 @@ late List <Color> acolors=<Color>[];
 
     children: [
 
-    Container(
-    padding: EdgeInsets.all(2.8),
-    child: Wrap(
+      Row(
+        //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
+          children:[
+            Container(
+              //padding: EdgeInsets.all(2.8),
+              child: Image.asset('assets/images/location.png',
+                height: 20,
+                width: 20,),
+            ),
 
-    children: [
-    Image.asset('assets/images/location.png',
-    height: 20,
-    width: 20,),
-    SizedBox(width: 5,),
-    Text(
-    '${snapshot.data!
-        .data[index].address}',
-    style: TextStyle(fontSize: 11),),
-    ],
-    ),
-    ),
+            SizedBox(width: 5,),
+            Container(
+              // margin: EdgeInsets.only(top: size.height*0.02),
+              width: width*0.7,
+              child:
+              Text(
+                '${snapshot.data!
+                    .data[index].address}',
+                style: TextStyle(fontSize: 11),),
+            ),
+          ]
+      ),
 
-    Container(
+      Container(
     padding: EdgeInsets.all(2.8),
     child: Wrap(
 
@@ -192,7 +225,7 @@ late List <Color> acolors=<Color>[];
     style: TextStyle(fontSize: 11),),
     Text(
     '${snapshot.data!
-        .data[index].shift_date}',
+                .data[index].shift_date}',
     style: TextStyle(fontSize: 11),),
     ],
     ),
@@ -210,8 +243,8 @@ late List <Color> acolors=<Color>[];
     style: TextStyle(fontSize: 11),),
     Text(
     '${snapshot.data!
-        .data[index].shift_start_time} AM To ${snapshot.data!
-        .data[index].shift_end_time} PM',
+                .data[index].shift_start_time}  To ${snapshot.data!
+                .data[index].shift_end_time}',
     style: TextStyle(fontSize: 12),),
     ],
     ),
@@ -252,49 +285,59 @@ late List <Color> acolors=<Color>[];
     Container(
     padding: EdgeInsets.fromLTRB(2.8,2.8,2.8,10),
     child:  Text('${snapshot.data!
-        .data[index].client_name} ',
+                .data[index].client_name} ',
     style: TextStyle(
     color: Colors.black, fontSize: 13),),
     ),
     ],
     ),
     ),
-      GestureDetector(
-        onTap: () {
-          // handleReadOnlyInputClick(context);
-          Accept(snapshot.data!
-              .data[index].id);
-          setState(() {
+            GestureDetector(
+                onTap: () {
+    // handleReadOnlyInputClick(context);
+    if(countera==0){
+    Accept(snapshot.data!
+        .data[index].id);
 
-          });
+    setState(() {
 
 
-        },
-        child:
-        Container(
+    });
+    }
+    if(countera==1){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar( behavior: SnackBarBehavior.floating,content: Text('Already Accepted Job')));
 
-          padding:
-          EdgeInsets.symmetric(
-              horizontal: 10, vertical: 10),
-          margin:
-          EdgeInsets.only(
-              left: 3, bottom: 0, right: 0),
+    }
 
-          decoration: ShapeDecoration(
-            color: acolors[index],
-            shape: RoundedRectangleBorder(
-              side: BorderSide(
-                width: 1.0,
-                style: BorderStyle.solid,
-                color: Color(0xfff7efef),),
-              borderRadius: BorderRadius.all(
-                  Radius.circular(5)),
-            ),
-          ),
-          child: Text("Accept",
-            style: TextStyle(color: Colors.white),),
-        ),
-      )
+    countera=1;
+
+
+                },
+                child:
+                Container(
+
+                  padding:
+                  EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                  margin:
+                  EdgeInsets.only(
+                        left: 3, bottom: 0, right: 0),
+
+                  decoration: ShapeDecoration(
+                      color: acolors[index],
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          width: 1.0,
+                          style: BorderStyle.solid,
+                          color: Color(0xfff7efef),),
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(5)),
+                      ),
+                  ),
+                  child: Text("Accept",
+                      style: TextStyle(color: Colors.white),),
+                ),
+            )
 
     ],
     ),
@@ -305,244 +348,264 @@ late List <Color> acolors=<Color>[];
     ));
 
     /*             Card(
-                      elevation: 5,
-                      margin: EdgeInsets.all(10),
-                      child: Container(
-                        padding: EdgeInsets.all(5),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Wrap(children: [
-                              Container(
-                                width: size.width * 0.7,
-                                padding: EdgeInsets.all(2.8),
-                                child: Text('${snapshot.data!.data[index].job_name}',
-                                  style: TextStyle(
-                                      color: kPrimaryColor, fontSize: 16),),
-                              ),
-                              Container(
-
-                                padding: EdgeInsets.all(2.8),
-                                margin:
-                                EdgeInsets.only(left: 3, bottom: 5),
-
-
-                                child:  Text('${snapshot.data!.data[index].id}',
-                                  style: TextStyle(color: kPrimaryColor,
-                                      fontWeight: FontWeight.bold),),
-                              ),
-                            ]),
-                            Container(
-                              width: width,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Container(
-
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
-                                      children: [
-
-                                        Container(
-                                          padding: EdgeInsets.all(2.8),
-                                          child: Wrap(
-                                            children: [
-                                              Image.asset(
-                                                'assets/images/location.png',
-                                                height: 20,
-                                                width: 20,),
-                                              SizedBox(width: 5,),
-                                              Text('${snapshot.data!.data[index].address}',
-                                                style: TextStyle(
-                                                    fontSize: 11),),
-                                            ],
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.all(2.8),
-                                          child: Wrap(
-
-                                            children: [
-                                              Image.asset(
-                                                'assets/images/shift_date.png',
-                                                height: 18,
-                                                width: 20,),
-                                              SizedBox(width: 5,),
-                                              Text('Shift Date :',
-                                                style: TextStyle(
-                                                    fontSize: 11),),
-                                              Text('${snapshot.data!.data[index].shift_date}',
-                                                style: TextStyle(
-                                                    fontSize: 11),),
-                                            ],
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.fromLTRB(
-                                              2.8, 2.8, 2.8, 10),
-                                          child: Wrap(
-                                            children: [
-                                              Image.asset(
-                                                'assets/images/shift_time.png',
-                                                height: 18,
-                                                width: 20,),
-                                              SizedBox(width: 5,),
-                                              Text('Shift Time :',
-                                                style: TextStyle(
-                                                    fontSize: 11),),
-                                              Text('${snapshot.data!.data[index].shift_start_time}To ${snapshot.data!.data[index].shift_end_time} ',
-                                                style: TextStyle(
-                                                    fontSize: 11),),
-                                            ],
-                                          ),
-                                        ),
-
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .center,
-                                      children: [
-                                        /*  Container(
-                                 
-                                  padding:
-                                  EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-                                  margin:
-                                  EdgeInsets.only(left: 3,bottom: 5,right: 5),
-                                  height: 30,
-                                  decoration: ShapeDecoration(
-                                    color: ksecondaryColor,
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          width: 1.0,
-                                          style: BorderStyle.solid,
-                                          color: kPrimaryColor),
-                                      borderRadius: BorderRadius.all(Radius.circular(1)),
-                                    ),
-                                  ),
-                                  child: Row(
+                                elevation: 5,
+                                margin: EdgeInsets.all(10),
+                                child: Container(
+                                  padding: EdgeInsets.all(5),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Image.asset('assets/images/map.png'),
-                                      SizedBox(width: 3,),
-                                      Text("110/H",
-                                        style: TextStyle( color: kPrimaryColor),),
+                                      Wrap(children: [
+                                        Container(
+                                          width: size.width * 0.7,
+                                          padding: EdgeInsets.all(2.8),
+                                          child: Text('${snapshot.data!.data[index].job_name}',
+                                            style: TextStyle(
+                                                color: kPrimaryColor, fontSize: 16),),
+                                        ),
+                                        Container(
+
+                                          padding: EdgeInsets.all(2.8),
+                                          margin:
+                                          EdgeInsets.only(left: 3, bottom: 5),
+
+
+                                          child:  Text('${snapshot.data!.data[index].id}',
+                                            style: TextStyle(color: kPrimaryColor,
+                                                fontWeight: FontWeight.bold),),
+                                        ),
+                                      ]),
+                                      Container(
+                                        width: width,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .spaceBetween,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Container(
+
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment
+                                                    .spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment
+                                                    .start,
+                                                children: [
+
+                                                  Container(
+                                                    padding: EdgeInsets.all(2.8),
+                                                    child: Wrap(
+                                                      children: [
+                                                        Image.asset(
+                                                          'assets/images/location.png',
+                                                          height: 20,
+                                                          width: 20,),
+                                                        SizedBox(width: 5,),
+                                                        Text('${snapshot.data!.data[index].address}',
+                                                          style: TextStyle(
+                                                              fontSize: 11),),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    padding: EdgeInsets.all(2.8),
+                                                    child: Wrap(
+
+                                                      children: [
+                                                        Image.asset(
+                                                          'assets/images/shift_date.png',
+                                                          height: 18,
+                                                          width: 20,),
+                                                        SizedBox(width: 5,),
+                                                        Text('Shift Date :',
+                                                          style: TextStyle(
+                                                              fontSize: 11),),
+                                                        Text('${snapshot.data!.data[index].shift_date}',
+                                                          style: TextStyle(
+                                                              fontSize: 11),),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    padding: EdgeInsets.fromLTRB(
+                                                        2.8, 2.8, 2.8, 10),
+                                                    child: Wrap(
+                                                      children: [
+                                                        Image.asset(
+                                                          'assets/images/shift_time.png',
+                                                          height: 18,
+                                                          width: 20,),
+                                                        SizedBox(width: 5,),
+                                                        Text('Shift Time :',
+                                                          style: TextStyle(
+                                                              fontSize: 11),),
+                                                        Text('${snapshot.data!.data[index].shift_start_time}To ${snapshot.data!.data[index].shift_end_time} ',
+                                                          style: TextStyle(
+                                                              fontSize: 11),),
+                                                      ],
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ),
+                                            Container(
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment
+                                                    .center,
+                                                children: [
+                                                  /*  Container(
+
+                                            padding:
+                                            EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+                                            margin:
+                                            EdgeInsets.only(left: 3,bottom: 5,right: 5),
+                                            height: 30,
+                                            decoration: ShapeDecoration(
+                                              color: ksecondaryColor,
+                                              shape: RoundedRectangleBorder(
+                                                side: BorderSide(
+                                                    width: 1.0,
+                                                    style: BorderStyle.solid,
+                                                    color: kPrimaryColor),
+                                                borderRadius: BorderRadius.all(Radius.circular(1)),
+                                              ),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Image.asset('assets/images/map.png'),
+                                                SizedBox(width: 3,),
+                                                Text("110/H",
+                                                  style: TextStyle( color: kPrimaryColor),),
+
+                                              ],
+                                            ),
+                                          ),
+
+                                         */
+
+
+                                                ],
+                                              ),
+                                            ),
+
+
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(
+                                        height: 5,
+                                        thickness: 1,
+                                        color: Colors.grey,
+                                      ),
+
+                                      Wrap(
+                                        // crossAxisAlignment: WrapCrossAlignment.start,
+
+                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                                        children: [
+                                          Container(
+                                            width: width * 0.67,
+                                            child:
+                                            Wrap(
+
+                                              children: [
+                                                Container(
+                                                  padding: EdgeInsets.all(3.8),
+                                                  child: Text('Client Name :',
+                                                    style: TextStyle(color: Colors.black,
+                                                        fontSize: 13,
+                                                        fontWeight: FontWeight.w600),),
+                                                ),
+
+                                                Container(
+                                                  padding: EdgeInsets.all(3.8),
+                                                  child:  Text('${snapshot.data!.data[index].job_name}',
+                                                    style: TextStyle(color: Colors.black,
+                                                        fontSize: 13),),
+                                                ),
+                                              ],
+
+                                            ),
+                                          ),
+
+                                          GestureDetector(
+                                            onTap: () {
+                                              // handleReadOnlyInputClick(context);
+                                              Accept();
+                                            },
+                                            child:
+                                            Container(
+
+                                              padding:
+                                              EdgeInsets.symmetric(
+                                                  horizontal: 10, vertical: 10),
+                                              margin:
+                                              EdgeInsets.only(
+                                                  left: 3, bottom: 0, right: 0),
+
+                                              decoration: ShapeDecoration(
+                                                color: Colors.green,
+                                                shape: RoundedRectangleBorder(
+                                                  side: BorderSide(
+                                                    width: 1.0,
+                                                    style: BorderStyle.solid,
+                                                    color: Color(0xfff7efef),),
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(5)),
+                                                ),
+                                              ),
+                                              child: Text("Accept",
+                                                style: TextStyle(color: Colors.white),),
+                                            ),
+                                          )
+
+                                        ],
+
+                                      ),
 
                                     ],
-                                  ),
-                                ),
-
-                               */
-
-
-                                      ],
-                                    ),
-                                  ),
-
-
-                                ],
-                              ),
-                            ),
-                            Divider(
-                              height: 5,
-                              thickness: 1,
-                              color: Colors.grey,
-                            ),
-
-                            Wrap(
-                              // crossAxisAlignment: WrapCrossAlignment.start,
-
-                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                              children: [
-                                Container(
-                                  width: width * 0.67,
-                                  child:
-                                  Wrap(
-
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(3.8),
-                                        child: Text('Client Name :',
-                                          style: TextStyle(color: Colors.black,
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w600),),
-                                      ),
-
-                                      Container(
-                                        padding: EdgeInsets.all(3.8),
-                                        child:  Text('${snapshot.data!.data[index].job_name}',
-                                          style: TextStyle(color: Colors.black,
-                                              fontSize: 13),),
-                                      ),
-                                    ],
-
-                                  ),
-                                ),
-
-                                GestureDetector(
-                                  onTap: () {
-                                    // handleReadOnlyInputClick(context);
-                                    Accept();
-                                  },
-                                  child:
-                                  Container(
-
-                                    padding:
-                                    EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 10),
-                                    margin:
-                                    EdgeInsets.only(
-                                        left: 3, bottom: 0, right: 0),
-
-                                    decoration: ShapeDecoration(
-                                      color: Colors.green,
-                                      shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                          width: 1.0,
-                                          style: BorderStyle.solid,
-                                          color: Color(0xfff7efef),),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(5)),
-                                      ),
-                                    ),
-                                    child: Text("Accept",
-                                      style: TextStyle(color: Colors.white),),
                                   ),
                                 )
-
-                              ],
-
-                            ),
-
-                          ],
-                        ),
-                      )
-                  ));
+                            ));
 
      */
-            },),
+                      },),
+                    ),
 
 
-          );
-      }
-      else{return SizedBox();}
+                  );
+            }
+            else{
+                if(snapshot.hasError)
+                {
+                  return Center(child: SizedBox(
+                    child: Text("NO Data Found" ,style: TextStyle(color: Colors.red),),),) ;}
+                else{
+
+                  return Center (child:SizedBox( child: Text("loading"),));
+                }
+            }
     })
-       )
+               ),
 
 
 
 
-        ],
+
+              ],
+            ),
+          ),
+        ),
       ),
     );
+  }
+  Future <void> refresh()
+  async {
+    setState(() {
+
+    });
   }
   Future <void> Accept(String jobid) async {
     String username = 'adiyogi';
@@ -659,7 +722,13 @@ late List <Color> acolors=<Color>[];
        if(jasonDataOffer["data"][i]["employee_id"]==null)
        { acolors.insert(i, kPrimaryColor);}
        else
-       { acolors.insert(i, Colors.grey);}
+       {
+         acolors.insert(i, Colors.grey);
+       countera==1;
+
+       }
+
+
 
           i++;
 

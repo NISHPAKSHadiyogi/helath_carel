@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
+import 'package:geolocator/geolocator.dart';
 import 'package:helath_care/Api/Models/siftModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ const double CAMERA_TILT = 80;
 const double CAMERA_BEARING = 30;
 const double PIN_VISIBLE_POSITION = 20;
 const double PIN_INVISIBLE_POSITION = -220;
+String endjob="0";
 class Shiftdetailscreen extends StatefulWidget {
  /*
   final String jobname;
@@ -48,6 +50,8 @@ class Shiftdetailscreen extends StatefulWidget {
 
 class _ShiftdetailscreenState extends State<Shiftdetailscreen> {
   late Timer timer;
+ var  _currentAddress;
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   int second = 0;
   late int timeHour=0;
   late int timeMinuts=0;
@@ -58,14 +62,14 @@ class _ShiftdetailscreenState extends State<Shiftdetailscreen> {
   var workingHour="0";
   var workingMin="0";
   var workingSec="0";
-
+  String name="";
   String start="";
   String end="";
   String check_in="";
   String check_out="";
 Color sscolorS =kPrimaryColor;
   Color sscolorE =kPrimaryColor;
-
+  Color completecolor= Colors.red;
   Set<Polyline> _polylines = Set<Polyline>();
   final double _initFabHeight = 120.0;
   double _fabHeight = 0;
@@ -108,6 +112,7 @@ Color sscolorS =kPrimaryColor;
   Set<Marker> _markers = Set<Marker>();
 String jobid1="";
   LatLng _lastMapPosition =LatLng(45.521563, -122.677433);
+
   void setInitialLocation() {
 
     // double userlat = -37.765613;
@@ -131,19 +136,27 @@ String jobid1="";
     // double long=userLocation.longitude==null?0.00:userLocation.longitude;
     setState(() {
      // currentLocation =LatLng(-37.838313, 144.986480);
+     // destinationLocation =LatLng(26.265445, 72.978937);
      currentLocation =LatLng(userLocation.latitude, userLocation.longitude);
-   //  double lat=double.parse(job_lat);
-    // double Log=double.parse(job_long);
-     //print('${lat}-----${Log}');
+     _getAddressFromLatLng();
+     // print('${job_lat}-----${job_long}');
 
-     destinationLocation =LatLng(26.265445, 72.978937);
+
+
     });
 
   }
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+  @override
   void initState() {
     jobid1=widget.jobid==null?"":widget.jobid;
-   // jobDetail();
+    jobDetail();
+
+
     setInitialLocation();
     setPolylines();
     super.initState();
@@ -155,6 +168,7 @@ String jobid1="";
   //  super.initState();
     //jobid1=widget.jobid==null?"":widget.jobid;
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -394,7 +408,7 @@ String jobid1="";
                                 borderRadius: BorderRadius.all(Radius.circular(1)),
                               ),
                             ),
-                            child: Text("\$${job_price}/H", style: TextStyle( color: kPrimaryColor),),
+                            child: Text("\$${job_price}", style: TextStyle( color: kPrimaryColor),),
                           ),
 
                         ])
@@ -420,18 +434,27 @@ String jobid1="";
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
 
-                          Container(
-                            padding: EdgeInsets.all(2.8),
-                            child: Wrap(
-                              children: [
-                                Image.asset('assets/images/location.png',
-                                  height: 20,
-                                  width: 20,),
+                          Row(
+                            //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                              children:[
+                                Container(
+                                  //padding: EdgeInsets.all(2.8),
+                                  child: Image.asset('assets/images/location.png',
+                                    height: 20,
+                                    width: 20,),
+                                ),
+
                                 SizedBox(width: 5,),
-                                Text(address,
-                                  style: TextStyle(fontSize: 11),),
-                              ],
-                            ),
+                                Container(
+                                  // margin: EdgeInsets.only(top: size.height*0.02),
+                                  width: width*0.7,
+                                  child:
+                                  Text(
+                                     address,
+                                    style: TextStyle(fontSize: 11),),
+                                ),
+                              ]
                           ),
                           Container(
                             padding: EdgeInsets.all(2.8),
@@ -580,26 +603,62 @@ String jobid1="";
                   children: [
                     Row(
                       children: [
-                        Container(
+                      /*  Container(
                           padding:EdgeInsets.all(8.8),
                           child: Text('Client Name :',
                             style: TextStyle(color: Colors.black,
                                 fontSize: 16,fontWeight: FontWeight.w600),),
                         ),
 
+
+
                         Container(
                           padding:EdgeInsets.all(8.8),
                           child: Text(client_name,
                             style: TextStyle(color: Colors.black, fontSize: 16),),
                         ),
+
+                       */
+                        Container(
+                          width: width*0.72,
+                          child:
+                          Row(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.fromLTRB(2.8,2.8,2.8,10),
+                                child: Text('Client Name :',
+                                  style: TextStyle(color: Colors.black,
+                                      fontSize: 13, fontWeight: FontWeight.w600),),
+                              ),
+
+                              Container(
+                                width: width*0.35,
+                                padding: EdgeInsets.fromLTRB(2.8,2.8,2.8,10),
+                                child:  Text(client_name ,
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 13),),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        Container(
+                          padding: EdgeInsets.fromLTRB(2.8,2.8,2.8,10),
+                          child: Text(job_status,
+                            style: TextStyle(color:completecolor,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),),
+                        ),
                       ],
                     ),
 
-                    Container(
+                  /*  Container(
                       padding:EdgeInsets.all(8.8),
                       child: Text(job_status,
                         style: TextStyle(color: Colors.red, fontSize: 16,fontWeight: FontWeight.w600),),
                     ),
+
+                   */
                   ],
                 ),
               ),
@@ -648,14 +707,263 @@ String jobid1="";
 
 
 
-    )
+    ),
+          Container(
+              alignment: Alignment.bottomCenter,
+              margin: EdgeInsets.only(bottom: 10),
+
+              padding: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                  boxShadow: [
+                    BoxShadow(
+                        color:
+                        Colors.black.withOpacity(0.2),
+                        blurRadius: 10,
+                        offset: Offset.zero)
+                  ]),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                     FittedBox(fit: BoxFit.fitHeight ,child:Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.asset('assets/images/map_clr.png', height: 25,width: 25,),
+
+                          Container(
+                              height: size.height*0.08,
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child:Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children:
+                                List.generate(
+                                    50 ~/ 2,
+                                        (index) => Expanded(
+                                      child: Container(
+                                        color: index % 2 == 0
+                                            ? Colors.transparent
+                                            : Colors.grey,
+                                        width: 1,
+                                      ),
+                                    )),
+                              )
+
+                          ),
+                          Icon(Icons.circle,size: 20,color: kPrimaryColor,),
+                          SizedBox(height: height*0.06,)
+
+                        ],
+                      ),),
+                      Column(
+                        crossAxisAlignment:
+                        CrossAxisAlignment
+                            .start,
+                        children: [
+                          Container(
+                            width: width/2.5,
+                            child: Text(
+                                "Customer Location ",
+                                style: TextStyle(
+                                    color: Colors
+                                        .grey[400],fontWeight: FontWeight.w400,
+
+                                    fontSize: 12)),
+                          ),
+
+
+                          Container(
+                            width: width/2.5,
+                            child: Text(client_name,
+                                style: TextStyle(
+                                    color:
+                                    Colors.black,
+                                    fontSize: 12)),
+                          ),
+                          Container(
+                            width: width/2.5,
+                            child: Text(address,
+                                style: TextStyle(
+                                    color:
+                                    Colors.blueGrey,fontSize: 11)),
+                          ),
+                          SizedBox(height: 10,),
+                          Container(
+                              child: Column(
+                                children: [
+                                  //SizedBox(height: 20),
+                                  Row(
+                                    children: [
+
+                                      Container(
+                                        width: size.width * 0.5,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment
+                                              .start,
+                                          children: [
+                                            Text(
+                                                "Your Current Location",
+                                                style: TextStyle(
+                                                    color: Colors
+                                                        .grey[400],
+
+                                                    fontSize: 12)),
+                                            Text(
+                                                name,
+                                                style: TextStyle(
+                                                    color: Colors
+                                                        .black,
+
+                                                    fontSize: 12)),
+
+                                            Container(
+                                              width: width/2.5,
+                                              child: Text(_currentAddress ??
+                                                  "=",
+                                                  style: TextStyle(
+                                                      color:
+                                                      Colors.blueGrey,fontSize: 11)),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              )),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          Container(
+                              padding: EdgeInsets.only(bottom: 30),
+                              child: Image.asset('assets/images/map_forward1.png', height: 25,width: 25,)),
+                          SizedBox(height: height*0.15,)
+                        ],
+                      ),
+                    ],
+                  ),
+
+                ],
+              ))
+         /*Container(
+              margin: EdgeInsets.all(20),
+              padding: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 10,
+                        offset: Offset.zero
+                    )
+                  ]
+              ),
+              child: Column(
+                children: [
+                  Container(
+                      color: Colors.white,
+                      child: Row(
+                        children: [
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Image.asset("assets/images/location.png",
+                                height: 40,
+                                width: 40,
+                              ),
+                              // Positioned(
+                              //   bottom: -10,
+                              //   right: -10,
+                              //   child: CategoryIcon(
+                              //       color: this.subCategory!.color,
+                              //       iconName: this.subCategory!.icon,
+                              //       size: 20,
+                              //       padding: 5
+                              //   ),
+                              // )
+                            ],
+                          ),
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("custermer location  : ",
+                                    style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15
+                                    )
+                                ),
+                                Text(address,
+                                    style: TextStyle(
+                                        color: Colors.red
+                                    )
+                                )
+                              ],
+                            ),
+                          ),
+
+                        ],
+                      )
+                  ),
+                  Container(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 20),
+                          Row(
+                            children: [
+                              Image.asset("assets/images/location.png",
+                                height: 40,
+                                width: 40,
+                              ),
+                              SizedBox(width: 20),
+                              Container(
+                                width: size.width*0.6,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Your Current Location",
+                                        style: TextStyle(fontWeight: FontWeight.bold)
+                                    ),
+                                    Text(_currentAddress??"=")
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+
+
+                        ],
+                      )
+                  )
+                ],
+              )
+          )
+
+          */
+
+
+
 
 
 
         ],
       );
     }
-    else{return SizedBox();}
+    else{return SizedBox(child:Text("loading...."),);}
     })
       ),
 
@@ -772,6 +1080,7 @@ void _onCameraMove(CameraPosition position) {
 }
 
   Future <siftDetailModel> Startjobsift() async {
+
     String username = 'adiyogi';
     String password = 'adi12345';
     var respone;
@@ -797,7 +1106,7 @@ void _onCameraMove(CameraPosition position) {
           'Content-Type':"application/x-www-form-urlencoded",},
         body: ({
           'job_id':jobid1,
-          'check_type': "check_in" ,
+          'check_type': "1" ,
           'employee_id':id,
 
           'location':"${currentLocation.latitude},${currentLocation.longitude}"
@@ -805,7 +1114,7 @@ void _onCameraMove(CameraPosition position) {
 
         }),);
 
-      print('Response status3a:${requestUrl}');
+      print('Response status3a:${jobid1}---${id}');
       var jasonDataOffer = jsonDecode(respone.body);
       if(respone.statusCode == 200){
         var res = jsonDecode(respone.body);
@@ -821,7 +1130,7 @@ void _onCameraMove(CameraPosition position) {
 
         */
 
-
+         await jobDetail();
 
 
 
@@ -829,31 +1138,71 @@ void _onCameraMove(CameraPosition position) {
        // DateFormat.Hms().format(DateTime.parse(CheckintimeFor_Counter));
       //  print("countertime : " + countertime.toString());
 
-        var counter = CheckintimeFor_Counter.split(":");
+       // var counter = CheckintimeFor_Counter.split(":");
+      /*  DateFormat.Hms().parse(selectedTime.hour.toString() +
+            ":" +
+            selectedTime.minute.toString() +
+            ":" +
+            '0' +
+            ":" +
+            '0');
 
-        var HOUR_24workingHour = counter[0];
-        var MIN_24workingHour = counter[1];
-        var SEC_24workingHour = counter[2];
+       */
+        print(CheckintimeFor_Counter);
+        var dateFormat = DateFormat("h:mm a");
 
-        workingHour = HOUR_24workingHour;
-        workingMin = MIN_24workingHour;
-        workingSec = SEC_24workingHour;
+        DateTime inputDate =dateFormat.parse(CheckintimeFor_Counter);
+        String out =DateFormat.Hms().format(inputDate);
 
-        print("workingHour &&&&&&&&&&&&&&&&&&&& : " + workingHour);
-        print("workingMin : " + workingMin);
-        print("workingSec : " + workingSec);
+/*
+        DateTime tempDate = new DateFormat(" MM/dd/yyyy hh:mm a").parse(CheckintimeFor_Counter);
+        var inputDate = DateTime.parse(tempDate.toString());
+        var outputFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        var outputDate = outputFormat.format(inputDate);
+        print(outputDate);
+
+ */
+        var counter = out.split(":");
+        //DateTime a =CheckintimeFor_Counter;
+        print(out);
+        print("############");
+    if(counter.length==3) {
+      var HOUR_24workingHour = counter[0];
+      var MIN_24workingHour = counter[1];
+      var SEC_24workingHour = counter[2];
+
+
+      workingHour = HOUR_24workingHour;
+      workingMin = MIN_24workingHour;
+      workingSec = SEC_24workingHour;
+
+      print("workingHour &&&&&&&&&&&&&&&&&&&& : " + workingHour);
+      print("workingMin : " + workingMin);
+      print("workingSec : " + workingSec);
+    }
         // print("timer.isActive: "+timer.isActive.toString());
 
+       /* sscolorS=Colors.grey;
+        start="0";
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${res["message"]}-----')));
+        startTimer();
 
-
+        */
+        var jasonDataOffer = jsonDecode(respone.body);
+      //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${jasonDataOffer["message"]}-----')));
+        sscolorS=Colors.grey;
         setState(() {
-          sscolorS=Colors.grey;
+
+
           start="0";
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${res["message"]}-----')));
+
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(behavior: SnackBarBehavior.floating,content: Text('${jasonDataOffer["message"]}')));
+         endjob="1";
+         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${jasonDataOffer["message"]}')));
           startTimer();
-
-
         });
+
+
 
         return siftDetailModel.fromJson(jasonDataOffer);
 
@@ -871,7 +1220,8 @@ void _onCameraMove(CameraPosition position) {
          res= jsonDecode(respone.body);
         var jasonDataOffer = jsonDecode(respone.body);
 
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${res["message"]}^^^')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(behavior: SnackBarBehavior.floating,content: Text('${jasonDataOffer["message"]}')));
+
         return jasonDataOffer;
         print('Response status: ${res["message"]}');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${res["message"]}')));
@@ -882,9 +1232,9 @@ void _onCameraMove(CameraPosition position) {
     else{
       print('Response statusp1: ${respone.statusCode}');
        res= jsonDecode(respone.body);
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${res["message"]}&&&&')));
       var jasonDataOffer = jsonDecode(respone.body);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(behavior: SnackBarBehavior.floating,content: Text('${jasonDataOffer["message"]}')));
+
       return jasonDataOffer;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${res["message"]}')));
     }
@@ -928,7 +1278,7 @@ void _onCameraMove(CameraPosition position) {
           'Content-Type':"application/x-www-form-urlencoded",},
         body: ({
           'job_id':jobid1,
-          'check_type': "check_out" ,
+          'check_type': "2" ,
           'employee_id':id,
 
           'location':"${currentLocation.latitude},${currentLocation.longitude}"
@@ -936,7 +1286,7 @@ void _onCameraMove(CameraPosition position) {
 
         }),);
 
-      print('Response status3a:${requestUrl}');
+      print('Response status3a:${requestUrl}--${job_id}----${id}');
       var jasonDataOffer = jsonDecode(respone.body);
       if(respone.statusCode == 200){
         //  print('Response status3: ${jasonDataOffer["data"]["job_name"]}');
@@ -954,6 +1304,15 @@ void _onCameraMove(CameraPosition position) {
         */
 
         end="0";
+        setState(() {
+          stopTime();
+          endjob="0";
+
+        });
+
+
+
+
         Navigator.push(context, MaterialPageRoute(builder: (context) => bottomBar( bottom: 10,jobid:jobid1,)));
 
         return siftDetailModel.fromJson(jasonDataOffer);
@@ -967,12 +1326,13 @@ void _onCameraMove(CameraPosition position) {
 
       }else{
         print('Response statusp: ${respone.statusCode}');
+        var jasonDataOffer = jsonDecode(respone.body);
 
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${res["message"]}')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${jasonDataOffer["message"]}')));
         //  print('Response status: ${userid} ${oldpassController.text}  ${newpassController.text}  ${cnfpassController.text}');
 
         // res= jsonDecode(respone.body);
-        var jasonDataOffer = jsonDecode(respone.body);
+
         return jasonDataOffer;
         print('Response status: ${res["message"]}');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${res["message"]}')));
@@ -982,7 +1342,7 @@ void _onCameraMove(CameraPosition position) {
 
     else{
       print('Response statusp1: ${respone.statusCode}');
-      // res= jsonDecode(respone.body);
+       res= jsonDecode(respone.body);
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${res["message"]}')));
       var jasonDataOffer = jsonDecode(respone.body);
@@ -999,6 +1359,8 @@ void _onCameraMove(CameraPosition position) {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? userid = preferences.getString("userid");
     String id= userid.toString();
+    String? username1 = preferences.getString("username");
+     name= username1.toString();
     //  String id= "22";
 
 
@@ -1053,19 +1415,46 @@ void _onCameraMove(CameraPosition position) {
         check_out=jasonDataOffer["data"]["check_out"];
         job_id=jasonDataOffer["data"]["job_id"];
 
-        print('${check_in}&&&&&${check_out}');
+
+        print('${job_lat}&&&&&${job_long}');
+        if(job_lat!=null && job_lat.isNotEmpty && job_long!=null && job_long.isNotEmpty) {
+          double lat=double.parse(job_lat);
+          double Log=double.parse(job_long);
+
+          destinationLocation =LatLng(lat, Log);
+        }
         CheckintimeFor_Counter = check_in.toString();
 
 
         if(job_status=="0")
         {
           job_status="pending";
+          completecolor=Colors.red;
         }
         if(job_status == "1")
-      {
-        job_status="process";
-      }
-        if(job_status == "2"){ job_status="complete";}
+        {
+          job_status="process";
+          completecolor=Colors.red;
+        }
+        if(job_status == "3")
+        {
+          job_status="Review Updated";
+          completecolor=Colors.green;
+
+        }
+        if(job_status == "4")
+
+        {
+          completecolor=Colors.red;
+          job_status="Closed";
+
+        }
+        if(job_status == "2")
+        {
+          job_status="complete";
+          completecolor=Colors.green;
+
+        }
        if(check_in==null)
          {
            sscolorS=kPrimaryColor;
@@ -1075,9 +1464,7 @@ void _onCameraMove(CameraPosition position) {
          {
 
            sscolorS=Colors.grey;
-           setState(() {
-             startTimer();
-           });
+
 
          }
         if(check_out==null){
@@ -1092,14 +1479,15 @@ void _onCameraMove(CameraPosition position) {
 
         }
 
+if(endjob=="1") {
+  setState(() {
 
-
+  });
+}
 
 
         return ("success");
-        setState(() {
 
-        });
 
 
 
@@ -1142,6 +1530,16 @@ void _onCameraMove(CameraPosition position) {
 
 
   }
+  void stopTime(){
+    setState(() {
+      timer.cancel();
+      timeHour=0;
+      timeMinuts=0;
+      timeSecond=0;
+    });
+
+
+  }
 
   void startTimer()  {
     const oneSec = const Duration(seconds: 1);
@@ -1161,6 +1559,7 @@ void _onCameraMove(CameraPosition position) {
           var  convertLocal = strToDateTime.toLocal();
 
           currentTime = DateFormat.Hms().format(convertLocal);
+         // var dateUtc = DateTime.now().timeZoneOffset;
           var dateUtc = DateTime.now().toUtc();
           var dateTime = DateFormat("yyyy-MM-dd HH:mm:ss").parse(dateUtc.toString(), true);
          strToDateTime = DateTime.parse(dateUtc.toString());
@@ -1179,8 +1578,8 @@ void _onCameraMove(CameraPosition position) {
           print("workingHour : " + workingHour);
           print("workingMin : " + workingMin);
           print("workingSec : " + workingSec);
-          int hour = int.parse(HOUR_24_CURRENT_Hour);
-          int minute = int.parse(MIN_24_CURRENT_Hour);
+          int hour = int.parse(HOUR_24_CURRENT_Hour)-5;
+          int minute = int.parse(MIN_24_CURRENT_Hour)-30;
           int second = int.parse(SEC_24_CURRENT_Hour);
           if (int.parse(workingSec.toString()) > second) {
             timeSecond = (60 + second) - int.parse(workingSec);
@@ -1210,5 +1609,26 @@ void _onCameraMove(CameraPosition position) {
       },
     );
   }
+  _getAddressFromLatLng() async {
+    try {
+      List<Placemark> p = await geolocator.placemarkFromCoordinates(
+          userLocation.latitude, userLocation.longitude);
 
+      Placemark place = p[0];
+       print("_currentAddress update " +
+           place.subLocality.toString() +
+           " : " +
+           place.locality.toString());
+      setState(() {
+        _currentAddress =
+        "${place.name}, ${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.postalCode}, ${place.country}";
+
+       // sharedPreferences.setString("address", _currentAddress);
+       // trackdashStudent();
+
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
 }
